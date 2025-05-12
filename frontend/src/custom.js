@@ -14,14 +14,17 @@ function convertMarkdownCalloutsToHtml(htmlText) {
 
   // Regex to match GitHub-style callouts inside blockquotes in HTML
   // Matches: <blockquote><p>[!TYPE] ... </p></blockquote>
-  const calloutRegex = /<blockquote>\s*<p>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*([\s\S]*?)<\/p>\s*<\/blockquote>/gm;
+  const calloutRegex =
+    /<blockquote>\s*<p>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*([\s\S]*?)<\/p>\s*<\/blockquote>/gm;
 
   return htmlText.replace(calloutRegex, function (match, type, content) {
     // Normalize the type to handle case variations
     const normalizedType = type.toUpperCase();
 
     // Make sure we have a valid type, or default to NOTE
-    const calloutType = Object.keys(calloutTypes).includes(normalizedType) ? normalizedType : "NOTE";
+    const calloutType = Object.keys(calloutTypes).includes(normalizedType)
+      ? normalizedType
+      : "NOTE";
 
     // Process the content - trim whitespace
     const processedContent = content.trim();
@@ -70,10 +73,13 @@ document.querySelectorAll(".clip-button").forEach((button) => {
       svg.setAttribute("fill", "green");
 
       // Create a new success path
-      const successPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const successPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
       successPath.setAttribute(
         "d",
-        "M10 2a3 3 0 0 0-2.83 2H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1.17A3 3 0 0 0 14 2zM9 5a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1m6.78 6.625a1 1 0 1 0-1.56-1.25l-3.303 4.128l-1.21-1.21a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.488-.082l4-5z",
+        "M10 2a3 3 0 0 0-2.83 2H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1.17A3 3 0 0 0 14 2zM9 5a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1m6.78 6.625a1 1 0 1 0-1.56-1.25l-3.303 4.128l-1.21-1.21a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.488-.082l4-5z"
       );
       svg.appendChild(successPath);
 
@@ -92,11 +98,14 @@ document.querySelectorAll(".clip-button").forEach((button) => {
         svg.removeAttribute("fill");
 
         // Create and add the original path back
-        const originalPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const originalPath = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path"
+        );
         originalPath.setAttribute("id", "clipSVG");
         originalPath.setAttribute(
           "d",
-          "m 19.658,22.84 5.75,-5.75 -5.75,-5.75 1.75,-1.7499999 7.5,7.4999999 -7.5,7.5 z m -3.316,0 -5.75,-5.75 5.75,-5.75 -1.75,-1.7499999 -7.5,7.4999999 7.5,7.5 z",
+          "m 19.658,22.84 5.75,-5.75 -5.75,-5.75 1.75,-1.7499999 7.5,7.4999999 -7.5,7.5 z m -3.316,0 -5.75,-5.75 5.75,-5.75 -1.75,-1.7499999 -7.5,7.4999999 7.5,7.5 z"
         );
         svg.appendChild(originalPath);
 
@@ -210,9 +219,13 @@ document.addEventListener("DOMContentLoaded", function () {
       return; // Stop if TOC list doesn't exist
     }
 
-    tocScrollContainerElement = tocListElement.closest(TOC_SCROLL_CONTAINER_SELECTOR);
+    tocScrollContainerElement = tocListElement.closest(
+      TOC_SCROLL_CONTAINER_SELECTOR
+    );
     if (!tocScrollContainerElement) {
-      console.warn(`TOC scroll container matching selector "${TOC_SCROLL_CONTAINER_SELECTOR}" not found. TOC scrolling might not work.`);
+      console.warn(
+        `TOC scroll container matching selector "${TOC_SCROLL_CONTAINER_SELECTOR}" not found. TOC scrolling might not work.`
+      );
       // We can still proceed without TOC scrolling, so don't return here.
       // tocScrollContainerElement will remain null, and checks later will handle it.
     }
@@ -308,7 +321,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentSectionId === null && headerElements.length > 0) {
       // Check if the first header is reasonably visible, otherwise highlight nothing
       const firstHeaderRect = headerElements[0].getBoundingClientRect();
-      if (firstHeaderRect.bottom > 0 && firstHeaderRect.top < window.innerHeight) {
+      if (
+        firstHeaderRect.bottom > 0 &&
+        firstHeaderRect.top < window.innerHeight
+      ) {
         currentSectionId = headerElements[0].id;
       }
     }
@@ -321,12 +337,19 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.add("toc-active");
         activeItemFound = true;
         // Scroll the active item into view within the TOC container
-        if (tocScrollContainerElement && typeof item.scrollIntoView === "function") {
+        if (
+          tocScrollContainerElement &&
+          typeof item.scrollIntoView === "function"
+        ) {
           // Check if element is already visible within the container
-          const containerRect = tocScrollContainerElement.getBoundingClientRect();
+          const containerRect =
+            tocScrollContainerElement.getBoundingClientRect();
           const itemRect = item.getBoundingClientRect();
 
-          if (itemRect.top < containerRect.top || itemRect.bottom > containerRect.bottom) {
+          if (
+            itemRect.top < containerRect.top ||
+            itemRect.bottom > containerRect.bottom
+          ) {
             // Only scroll if needed. 'nearest' prevents scrolling if already visible.
             item.scrollIntoView({ block: "nearest", behavior: "auto" }); // Use 'auto' for immediate jump during scroll, 'smooth' can feel weird here
           }

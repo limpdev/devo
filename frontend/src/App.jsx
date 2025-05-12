@@ -22,7 +22,7 @@ const md = new MarkdownIt({
 })
 	.use(markdownItAnchor, {
 		permalink: true,
-		permalinkSymbol: "",
+		permalinkSymbol: "#",
 		permalinkSpace: false,
 	})
 	.use(markdownItHighlight);

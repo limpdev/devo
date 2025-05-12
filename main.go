@@ -9,6 +9,7 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver" // Import assetserver options
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
@@ -44,6 +45,22 @@ func main() {
 			WebviewIsTransparent: true, // Allows underlying window/desktop to show if HTML is *also* transparent
 			WindowIsTranslucent:  true, // Usually false unless you want the whole window semi-transparent
 			DisablePinchZoom:     true,
+		},
+		Mac: &mac.Options{
+			TitleBar: &mac.TitleBar{
+				TitlebarAppearsTransparent: true,
+				//HideTitle:                  false,
+				//HideTitleBar:               false,
+				//FullSizeContent:            false,
+				//UseToolbar:                 false,
+				//HideToolbarSeparator:       true,
+			},
+			//Appearance:           mac.NSAppearanceNameDarkAqua,
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  false,
+			About: &mac.AboutInfo{
+				Title: "devo",
+			},
 		},
 		// main.go (AssetServer part)
 		AssetServer: &assetserver.Options{
