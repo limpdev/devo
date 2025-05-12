@@ -346,7 +346,6 @@ i[class^="devicon-"] {
 .main-layout img {
 	border-style: none;
 	max-width: 100%;
-	width: 25%;
 	box-sizing: content-box;
 }
 .main-layout code,
