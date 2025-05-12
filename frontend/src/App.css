@@ -1,3 +1,7 @@
+:root {
+	--bgTransparent: rgba(0, 0, 0, 0.0);
+}
+
 #app {
 	height: 100vh;
 	text-align: center;
@@ -13,6 +17,7 @@ body,
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
+	background: var(--bgColor-default);
 	/* Prevent body scrollbars if children manage their own */
 }
 
@@ -20,7 +25,7 @@ body,
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
-	background-color: #1e1e1e;
+	background: var(--bgColor-default);
 	color: #ccc;
 	font-family:
 		"Jost",

@@ -100,14 +100,13 @@ body,
 }
 
 .title-bar {
-	background: #161616;
+	background: var(--bgColor-default);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 22px;
+	height: 24px;
 	cursor: grab, auto;
 	/* Adjust height as needed */
-	background-color: transparent;
 	/* Dark title bar */
 	color: rgba(250, 165, 80, 0.314);
 	padding: 1px 8px;
@@ -115,6 +114,7 @@ body,
 	/* Prevent shrinking */
 	/* --wails-draggable: drag; applied inline for specificity if needed */
 	user-select: none;
+	cursor: var(--crosshair);
 	/* Prevent text selection */
 }
 
@@ -127,16 +127,16 @@ body,
 .window-button {
 	background: none;
 	border: none;
-	border-radius: 3px;
+	border-radius: 5px;
 	/* margin-left: 2px; */
-	margin-right: 2px;
-	height: 13px;
+	margin-right: 1.5px;
+	height: 14px;
 	line-height: 1.1em;
-	font-size: 10px;
-	cursor: var(--crosshair), auto;
+	font-size: 11px;
+	cursor: var(--crosshair);
 	font-family: "Segoe MDL2 Assets", "Symbols Nerd Font", "Apple Symbols", "system-ui";
 	-webkit-app-region: no-drag; /* Important for Wails frameless */
-	transition: all 500ms ease-in-out;
+	transition: all 300ms ease-in;
 }
 
 .window-button.close:hover {
@@ -149,7 +149,7 @@ body,
 }
 
 .title-bar-text {
-	font-family: "Symbols Nerd Font";
+	font-family: "Jost", "Symbols Nerd Font", sans-serif;
 	font-size: larger;
 }
 
@@ -301,6 +301,13 @@ i[class^="devicon-"] {
 .main-layout a {
 	background-color: transparent;
 	text-decoration: none;
+	color: #7cc0ede0;
+}
+a.toc-item-link {
+	color: #cecece;
+	font-family: "Jost", "Symbols Nerd Font", sans-serif;
+	font-weight: 500;
+
 }
 .main-layout abbr[title] {
 	border-bottom: none;
@@ -1124,6 +1131,24 @@ pre {
 }
 .main-layout .task-list-item.enabled label {
 	cursor: pointer;
+}
+.header-anchor {
+	text-decoration: none !important;
+	vertical-align: top;
+	font-size: 0.7em;
+	opacity: 0;
+	transition: all 200ms ease;
+}
+h1:hover .header-anchor,
+h2:hover .header-anchor,
+h3:hover .header-anchor,
+h4:hover .header-anchor,
+h5:hover .header-anchor,
+h6:hover .header-anchor {
+	vertical-align: top;
+	font-size: 1.0em;
+  	text-decoration: none !important;
+  	opacity: 0.5;
 }
 .code-wrapper {
 	position: relative;

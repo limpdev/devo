@@ -1,3 +1,334 @@
+## `app.go`
+
+```go
+// app.go
+package main
+
+import (
+	"context"
+	"fmt"
+	"io/ioutil" // To read files
+	"log"
+	"os"            // For file operations
+	"path/filepath" // For path manipulation
+)
+
+// App struct
+type App struct {
+	ctx context.Context
+}
+
+// NewApp creates a new App application struct
+func NewApp() *App {
+	return &App{}
+}
+
+// startup is called when the app starts. The context is saved
+// so we can call the runtime methods
+func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
+	log.Println("..󰟓 Ignition ..Startup Now Eminent  ..")
+}
+
+// shutdown is called at application termination
+func (a *App) shutdown(ctx context.Context) {
+	log.Println("App Shutdown: Performing cleanup...")
+	log.Println("Cleanup finished. Goodbye!")
+}
+
+func (a *App) ClipboardGetText(ctx context.Context) (string, error) {
+	// Implement your logic to get text from the clipboard here
+	log.Println("Get Text triggered")
+	return "", nil
+}
+
+func (a *App) ClipboardSetText(ctx context.Context) (string, error) {
+	// Implement your logic to set text to the clipboard here
+	log.Println("Set Text triggered")
+	return "", nil
+}
+
+// Greet returns a greeting for the given name
+func (a *App) Greet(name string) string {
+	return fmt.Sprintf("Welcome, %s, your home for knowledge", name)
+}
+
+// GetMarkdownContent reads a specific markdown file and returns its content.
+// For now, let's hardcode a path. Later, you can make this dynamic.
+// Example: Read from your mdbook's source.
+func (a *App) GetMarkdownContent(relativePath string) (string, error) {
+	// Define a base directory for your markdown files, e.g., your mdbook's src
+	// For safety, ensure the baseDir is something you control.
+	// IMPORTANT: In a real app, you'd want to be very careful about
+	// allowing arbitrary file paths. Sanitize `relativePath` or use a whitelist.
+	baseDir := "book/LimpBook" // Assuming your mdbook source is in ./book/src
+
+	// Clean and join the path to prevent path traversal issues
+	// filepath.Join cleans the path.
+	// filepath.Clean prevents ".." and other tricks if baseDir was absolute.
+	// However, for relative baseDir, we should resolve to absolute first for safety.
+	absBaseDir, err := filepath.Abs(baseDir)
+	if err != nil {
+		log.Printf("Error getting absolute path for baseDir: %v", err)
+		return "", fmt.Errorf("internal server error: could not determine base directory")
+	}
+
+	// Clean the relativePath to prevent it from escaping the intended directory
+	// by removing leading slashes or ".." components that might try to go above baseDir
+	cleanedRelativePath := filepath.Clean(filepath.Join("/", relativePath)) // Add leading / to treat as root for Clean
+	if len(cleanedRelativePath) > 0 && cleanedRelativePath[0] == '/' {      // Remove leading / from Join
+		cleanedRelativePath = cleanedRelativePath[1:]
+	}
+
+	targetPath := filepath.Join(absBaseDir, cleanedRelativePath)
+
+	// Security check: Ensure the resolved targetPath is still within absBaseDir
+	// This helps prevent '..' in relativePath from escaping absBaseDir
+	if !filepath.HasPrefix(targetPath, absBaseDir) {
+		log.Printf("Security alert: Attempt to access file outside base directory: %s (resolved to %s)", relativePath, targetPath)
+		return "", fmt.Errorf("invalid file path")
+	}
+
+	log.Printf("Attempting to read markdown file: %s", targetPath)
+
+	// Check if the file exists
+	if _, err := os.Stat(targetPath); os.IsNotExist(err) {
+		log.Printf("Markdown file not found: %s", targetPath)
+		return "", fmt.Errorf("markdown file not found: %s", relativePath)
+	}
+
+	content, err := ioutil.ReadFile(targetPath)
+	if err != nil {
+		log.Printf("Error reading markdown file %s: %v", targetPath, err)
+		return "", fmt.Errorf("could not read markdown file: %w", err)
+	}
+	return string(content), nil
+}
+
+func (a *App) WindowReload(ctx context.Context) {
+	log.Println("Window reload triggered")
+	// Implement your logic to reload the window here
+}
+
+func (a *App) WindowReloadApp(ctx context.Context) {
+	log.Println("App reload triggered")
+	// Implement your logic to reload the app here
+}
+
+func (a *App) WindowSetAlwaysOnTop(ctx context.Context) {
+	log.Println("Window set to always on top")
+	// Implement your logic to set the window always on top here
+}
+
+// GetBookData retrieves the book's Table of Contents and the content of the first chapter.
+func (a *App) GetBookData() (BookData, error) {
+	summaryFilePath := filepath.Join(bookSrcPath, "SUMMARY.md")
+	log.Printf("Attempting to load book data from: %s", summaryFilePath)
+
+	var bookData BookData
+
+	toc, firstChapterRelPath, err := a.parseSummaryMD(summaryFilePath)
+	if err != nil {
+		errMsg := fmt.Sprintf("Error parsing SUMMARY.md: %v", err)
+		log.Println(errMsg)
+		bookData.Error = errMsg
+		// Return what we have, frontend can display error
+		return bookData, fmt.Errorf(errMsg) // Or return bookData with error field set
+	}
+	bookData.TOC = toc
+
+	if firstChapterRelPath == "" {
+		// Fallback if no chapter found in SUMMARY.md, or SUMMARY.md is empty/missing
+		firstChapterRelPath = "README.md" // A common default
+		log.Printf("No initial chapter determined from SUMMARY.md, defaulting to: %s", firstChapterRelPath)
+	}
+	bookData.InitialPath = firstChapterRelPath
+
+	// Load initial markdown content
+	// GetMarkdownContent expects path relative to its baseDir (which is also bookSrcPath)
+	initialMarkdown, err := a.GetMarkdownContent(firstChapterRelPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("Error loading initial chapter '%s': %v", firstChapterRelPath, err)
+		log.Println(errMsg)
+		bookData.Error = fmt.Sprintf("%s (Initial Content Load: %s)", bookData.Error, errMsg) // Append error
+		// Send placeholder markdown or error message as content
+		bookData.InitialMarkdown = fmt.Sprintf("# Error Loading Content\n\nCould not load: `%s`\n\n**Details:**\n```\n%s\n```", firstChapterRelPath, err.Error())
+	} else {
+		bookData.InitialMarkdown = initialMarkdown
+	}
+
+	log.Printf("Successfully loaded book data. Initial chapter: %s", firstChapterRelPath)
+	return bookData, nil // Return nil error if TOC parsed, even if initial content failed (error is in BookData.Error)
+}
+```
+
+## `bookParser.go`
+
+```go
+// app.go (or bookParser.go)
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"regexp"
+	"strings"
+)
+
+// ... (App struct, NewApp, startup, shutdown, Greet, GetMarkdownContent from previous steps)
+
+const bookSrcPath = "./book/LimpBook/" // Define base path for book source
+
+// parseSummaryMD parses the SUMMARY.md file and returns a slice of TOCItem and the first chapter path.
+func (a *App) parseSummaryMD(summaryFilePath string) ([]TOCItem, string, error) {
+	file, err := os.Open(summaryFilePath)
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to open SUMMARY.md '%s': %w", summaryFilePath, err)
+	}
+	defer file.Close()
+
+	var toc []TOCItem
+	var firstChapterPath string = ""
+
+	// Regex to capture: indent, title, path
+	// Example: `  - [My Chapter](./my-chapter.md)`
+	// Handles '*' or '-' list markers.
+	// (?P<indent>\s*) captures leading spaces.
+	// (?P<title>[^\]]+) captures text inside [].
+	// (?P<path>[^\)]*) captures text inside (), allows empty path for section headers.
+	re := regexp.MustCompile(`^(?P<indent>\s*)[-*]\s*\[(?P<title>[^\]]+)\]\((?P<path>[^\)]*)\)`)
+
+	scanner := bufio.NewScanner(file)
+	var parentStack []*[]TOCItem            // Stack to manage current parent for nesting
+	parentStack = append(parentStack, &toc) // Root level
+	lastLevel := -1
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		trimmedLine := strings.TrimSpace(line)
+
+		// Skip empty lines or lines not starting with a list marker (simple filter)
+		if trimmedLine == "" || (!strings.HasPrefix(trimmedLine, "- ") && !strings.HasPrefix(trimmedLine, "* ")) {
+			continue
+		}
+
+		matches := re.FindStringSubmatch(line)
+		if len(matches) == 0 {
+			// Might be a section header without a link, or just text.
+			// For simplicity, we'll try a simpler regex for titles without links,
+			// or ignore lines that don't match the link pattern for now.
+			// Example: `- Section Title` (mdbook might allow this, we'll make it need a dummy link for now: `[]()`)
+			// For now, we primarily care about linked items.
+			log.Printf("Skipping line in SUMMARY.md (no match): %s", line)
+			continue
+		}
+
+		matchMap := make(map[string]string)
+		for i, name := range re.SubexpNames() {
+			if i != 0 && name != "" {
+				matchMap[name] = matches[i]
+			}
+		}
+
+		title := strings.TrimSpace(matchMap["title"])
+		path := strings.TrimSpace(matchMap["path"])
+		indentStr := matchMap["indent"]
+		currentLevel := len(indentStr) / 2 // Assuming 2 spaces per indent level. Adjust if your mdbook uses different (e.g. 4)
+
+		// Clean path: remove ./
+		if strings.HasPrefix(path, "./") {
+			path = path[2:]
+		}
+
+		item := TOCItem{Title: title, Path: path, Level: currentLevel}
+
+		if path != "" && strings.HasSuffix(strings.ToLower(path), ".md") && firstChapterPath == "" {
+			firstChapterPath = path
+		}
+
+		if currentLevel > lastLevel {
+			// New deeper level: current item's children will be the new parent list.
+			// Get the last item added to the *current* parent list.
+			currentParentList := parentStack[len(parentStack)-1]
+			if len(*currentParentList) > 0 {
+				lastItemInParent := &(*currentParentList)[len(*currentParentList)-1]
+				parentStack = append(parentStack, &lastItemInParent.Children)
+			} else {
+				// This case (e.g. first item is indented) means it's still part of the current parent scope.
+				// Or could indicate a malformed SUMMARY.md. For simplicity, add to current parent.
+			}
+		} else if currentLevel < lastLevel {
+			// Moving up: pop from stack for each level decreased
+			for i := 0; i < (lastLevel - currentLevel); i++ {
+				if len(parentStack) > 1 { // Don't pop the root
+					parentStack = parentStack[:len(parentStack)-1]
+				}
+			}
+		}
+		// If currentLevel == lastLevel, parent remains the same.
+
+		targetList := parentStack[len(parentStack)-1]
+		*targetList = append(*targetList, item)
+		lastLevel = currentLevel
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, "", fmt.Errorf("error scanning SUMMARY.md: %w", err)
+	}
+
+	// If firstChapterPath is still empty (e.g. SUMMARY.md has no .md links or is empty)
+	// try to find the first .md file in the parsed TOC.
+	if firstChapterPath == "" && len(toc) > 0 {
+		firstChapterPath = findFirstMarkdownFileInTOC(toc)
+	}
+
+	return toc, firstChapterPath, nil
+}
+
+// Helper to find the first .md file in a TOC structure (depth-first)
+func findFirstMarkdownFileInTOC(items []TOCItem) string {
+	for _, item := range items {
+		if item.Path != "" && strings.HasSuffix(strings.ToLower(item.Path), ".md") {
+			return item.Path
+		}
+		if len(item.Children) > 0 {
+			childPath := findFirstMarkdownFileInTOC(item.Children)
+			if childPath != "" {
+				return childPath
+			}
+		}
+	}
+	return ""
+}
+```
+
+## `bookTypes.go`
+
+```go
+package main
+
+// TOCItem represents an item in the Table of Contents
+type TOCItem struct {
+	Title    string    `json:"title"`
+	Path     string    `json:"path,omitempty"` // Relative path to the .md file from ./book/src/
+	Level    int       `json:"level"`          // Indentation level
+	Children []TOCItem `json:"children,omitempty"`
+}
+
+// BookData holds the TOC and the content of the initially loaded chapter
+type BookData struct {
+	TOC             []TOCItem `json:"toc"`
+	InitialMarkdown string    `json:"initialMarkdown"`
+	InitialPath     string    `json:"initialPath"`     // Path of the initially loaded markdown
+	Error           string    `json:"error,omitempty"` // In case of loading errors
+}
+```
+
+## `frontend\src\App.jsx`
+
+```
 // frontend/src/App.jsx
 import { useState, useEffect, useCallback } from "react";
 import * as runtime from "../wailsjs/runtime/runtime";
@@ -191,7 +522,7 @@ const md = new MarkdownIt({
 })
 	.use(markdownItAnchor, {
 		permalink: true,
-		permalinkSymbol: " 󰓼",
+		permalinkSymbol: "󰓼",
 		permalinkSpace: false,
 	})
 	.use(markdownItHighlight);
@@ -480,3 +811,202 @@ function App() {
 }
 
 export default App;
+```
+
+## `frontend\src\components\TableOfContents.jsx`
+
+```
+// frontend/src/components/TableOfContents.jsx
+import React from "react";
+import "./TableOfContents.css";
+
+const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
+	const isCurrent = item.path && item.path === currentPath;
+	const effectiveLevel = typeof level === "number" ? level : item.level || 0;
+
+	// Only make items with .md paths clickable for content loading.
+	// Items with empty path might be section headers.
+	const isClickable = item.path && item.path.toLowerCase().endsWith(".md");
+
+	return (
+		<li>
+			{isClickable ? (
+				<a
+					href={`#${item.path}`} // Use hash for potential SPA routing, prevent full reload
+					className={`toc-item-link ${isCurrent ? "active" : ""}`}
+					onClick={(e) => {
+						e.preventDefault();
+						onItemClick(item.path);
+					}}
+					style={{ paddingLeft: `${effectiveLevel * 15 + 10}px` }} // Indentation
+					title={item.path}
+				>
+					{item.title}
+				</a>
+			) : (
+				<span className="toc-item-header" style={{ paddingLeft: `${effectiveLevel * 15 + 10}px`, fontWeight: item.level === 0 ? "bold" : "normal" }}>
+					{item.title}
+				</span>
+			)}
+			{item.children && item.children.length > 0 && (
+				<ul>
+					{item.children.map((child, index) => (
+						<TOCItemLink
+							key={child.path || `child-${item.title}-${index}`}
+							item={child}
+							onItemClick={onItemClick}
+							currentPath={currentPath}
+							level={effectiveLevel + 1} // Pass incremented level for children
+						/>
+					))}
+				</ul>
+			)}
+		</li>
+	);
+};
+
+const TableOfContents = ({ tocItems, onItemClick, currentPath }) => {
+	if (!tocItems || tocItems.length === 0) {
+		return (
+			<div className="toc-container hide-scrollbar scrollbar-none">
+				<p>Table of Contents is empty or could not be loaded.</p>
+			</div>
+		);
+	}
+
+	return (
+		<nav className="toc-container hide-scrollbar scrollbar-none">
+			{/* Optional: Add a title for the TOC itself */}
+			{/* <h3 className="toc-title">Contents</h3> */}
+			<ul>
+				{tocItems.map((item, index) => (
+					<TOCItemLink
+						key={item.path || `item-${item.title}-${index}`} // Ensure key is unique
+						item={item}
+						onItemClick={onItemClick}
+						currentPath={currentPath}
+						level={item.level || 0} // Pass initial level
+					/>
+				))}
+			</ul>
+		</nav>
+	);
+};
+
+export default TableOfContents;
+```
+
+## `frontend\src\main.jsx`
+
+```
+import React from 'react'
+import {createRoot} from 'react-dom/client'
+import './style.css'
+import App from './App'
+
+const container = document.getElementById('root')
+
+const root = createRoot(container)
+
+root.render(
+    <React.StrictMode>
+        <App/>
+    </React.StrictMode>
+)
+```
+
+## `main.go`
+
+```go
+package main
+
+import (
+	"embed"
+	"log"
+	"net/http" // Import the net/http package
+	"strings"
+
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver" // Import assetserver options
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
+)
+
+//go:embed all:frontend/dist
+var assets embed.FS // Keep for build process, but not used for serving in this config
+
+func main() {
+	// Create an instance of the app structure
+	app := NewApp()
+	const bookSrcPath = "./book/LimpBook/" // Same as in app.go
+
+	// assets := "frontend/dist" 		      // If used, the path can't be used
+
+	// Create application with options
+	err := wails.Run(&options.App{
+		Title:                    "devo",
+		Width:                    1024,
+		Height:                   1200,
+		Frameless:                true,
+		Fullscreen:               false,
+		HideWindowOnClose:        true,
+		EnableDefaultContextMenu: true,
+		OnStartup:                app.startup,
+		OnShutdown:               app.shutdown,
+		DragAndDrop: &options.DragAndDrop{
+			EnableFileDrop:     true,
+			DisableWebViewDrop: false,
+			CSSDropProperty:    "--wails-drop-target",
+			CSSDropValue:       "drop",
+		},
+		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
+		Windows: &windows.Options{
+			WebviewIsTransparent: true, // Allows underlying window/desktop to show if HTML is *also* transparent
+			WindowIsTranslucent:  true, // Usually false unless you want the whole window semi-transparent
+			DisablePinchZoom:     true,
+		},
+		Mac: &mac.Options{
+			TitleBar: &mac.TitleBar{
+				TitlebarAppearsTransparent: true,
+				//HideTitle:                  false,
+				//HideTitleBar:               false,
+				//FullSizeContent:            false,
+				//UseToolbar:                 false,
+				//HideToolbarSeparator:       true,
+			},
+			//Appearance:           mac.NSAppearanceNameDarkAqua,
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  false,
+			About: &mac.AboutInfo{
+				Title: "devo",
+			},
+		},
+		// main.go (AssetServer part)
+		AssetServer: &assetserver.Options{
+			Assets: assets, // Serves the React frontend
+			Middleware: func(next http.Handler) http.Handler {
+				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					path := r.URL.Path
+					// Serve assets for markdown (e.g. images) from ./book/LimpBook/
+					if strings.HasPrefix(path, "frontend/dist") {
+						// log.Printf("Serving book asset: %s", path) // For debugging
+						http.StripPrefix("frontend/dist", http.FileServer(http.Dir(bookSrcPath))).ServeHTTP(w, r)
+						return
+					}
+					log.Printf("Serving frontend asset: %s", path) // For debugging
+					next.ServeHTTP(w, r)                           // Let Wails serve the React app
+				})
+			},
+		},
+		Bind: []interface{}{
+			app,
+		},
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+

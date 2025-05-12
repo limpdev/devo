@@ -40,7 +40,7 @@ func main() {
 			CSSDropProperty:    "--wails-drop-target",
 			CSSDropValue:       "drop",
 		},
-		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
+		BackgroundColour: &options.RGBA{R: 16, G: 16, B: 16, A: 1},
 		Windows: &windows.Options{
 			WebviewIsTransparent: true, // Allows underlying window/desktop to show if HTML is *also* transparent
 			WindowIsTranslucent:  true, // Usually false unless you want the whole window semi-transparent

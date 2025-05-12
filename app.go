@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil" // To read files
 	"log"
 	"os"            // For file operations
 	"path/filepath" // For path manipulation
@@ -58,7 +57,7 @@ func (a *App) GetMarkdownContent(relativePath string) (string, error) {
 	// For safety, ensure the baseDir is something you control.
 	// IMPORTANT: In a real app, you'd want to be very careful about
 	// allowing arbitrary file paths. Sanitize `relativePath` or use a whitelist.
-	baseDir := "book/LimpBook" // Assuming your mdbook source is in ./book/src
+	baseDir := "book/LimpBook" // Assuming your mdbook source is in ./book/LimpBook
 
 	// Clean and join the path to prevent path traversal issues
 	// filepath.Join cleans the path.
@@ -94,7 +93,7 @@ func (a *App) GetMarkdownContent(relativePath string) (string, error) {
 		return "", fmt.Errorf("markdown file not found: %s", relativePath)
 	}
 
-	content, err := ioutil.ReadFile(targetPath)
+	content, err := os.ReadFile(targetPath)
 	if err != nil {
 		log.Printf("Error reading markdown file %s: %v", targetPath, err)
 		return "", fmt.Errorf("could not read markdown file: %w", err)
