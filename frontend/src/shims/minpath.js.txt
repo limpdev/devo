@@ -1,0 +1,49 @@
+// A minimal path shim to replace the #minpath import from vfile
+// This provides just enough functionality for vfile to work in browser environments
+
+export function basename(path, ext) {
+  if (!path) return path;
+  
+  // Handle Unix/Windows path separators
+  const parts = path.split(/[/\\]/);
+  let filename = parts.pop();
+  
+  // Handle extension removal if specified
+  if (ext && filename.endsWith(ext)) {
+    filename = filename.slice(0, -ext.length);
+  }
+  
+  return filename;
+}
+
+export function dirname(path) {
+  if (!path) return path;
+  
+  // Handle Unix/Windows path separators
+  const parts = path.split(/[/\\]/);
+  parts.pop(); // Remove the last part (filename)
+  
+  if (parts.length === 0) return '.';
+  return parts.join('/');
+}
+
+export function extname(path) {
+  if (!path) return '';
+  
+  const lastDotIndex = path.lastIndexOf('.');
+  if (lastDotIndex < 0 || lastDotIndex === 0) return '';
+  
+  return path.slice(lastDotIndex);
+}
+
+export function join(...paths) {
+  return paths.filter(Boolean).join('/').replace(/\/+/g, '/');
+}
+
+// Default export for ESM compatibility
+export default {
+  basename,
+  dirname,
+  extname,
+  join
+};

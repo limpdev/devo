@@ -1,0 +1,89 @@
+/* frontend/src/components/TableOfContents.css */
+.toc-container {
+	width: 280px; /* Adjust as needed */
+	min-width: 200px;
+	max-height: 85vh; /* Fill the height of its flex container */
+	overflow-y: auto;
+	background-color: linear-gradient(to left, #09090a 0%, #1616161 100%); /* Slightly different background */
+	padding: 15px 0px; /* Add some top/bottom padding, no side for full-width feel of items */
+	border-right: 1px solid #3a3a3eaa;
+	box-sizing: border-box;
+	align-self: anchor-center;
+	cursor: var(--crosshair), auto;
+}
+
+nav > ul > li > ul > li > a {
+	color: #aaa;
+}
+
+.toc-container ul {
+	list-style: none;
+	padding-left: 0;
+	margin: 0;
+}
+
+.toc-container li {
+	margin: 0; /* Remove default li margins */
+}
+
+.toc-item-link,
+.toc-item-header {
+	font-family: "SFProCompact Nerd Font", "Symbols Nerd Font", sans-serif;
+	font-weight: 400;
+	display: block;
+	padding: 8px 10px 8px 15px; /* Default padding, left padding adjusted by style prop */
+	text-decoration: none !important;
+	color: #ddd8e6bb;
+	font-size: 0.85em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	border-left: 3px solid transparent; /* For active indicator */
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease,
+		border-left-color 0.3s ease;
+}
+
+.toc-item-link:hover {
+	background-color: #33333720;
+	color: #cf5b38;
+	border-left-color: #61dafb50;
+}
+
+.toc-item-link.active {
+	background-color: #005ea515; /* Subtle active background */
+	color: #61dafbbb; /* Brighter active text color */
+	font-weight: 600;
+	border-left-color: #61dafb80; /* Active indicator line */
+	border-left-width: 5px;
+}
+
+.toc-item-header {
+	color: #a0a0a050; /* Dimmer color for non-linkable headers */
+	font-weight: bold;
+	cursor: var(--crosshair);
+	padding-top: 10px;
+	padding-bottom: 5px;
+	/* margin-top: 5px; */
+}
+
+/* Top + bottom gradient overlay */
+/* .toc-container::before,
+.toc-container::after {
+	left: 0;
+	right: 0;
+	height: 40px;
+	z-index: 10;
+	pointer-events: none; /* allow scroll interaction through */
+/* } */
+
+/* .toc-container::before {
+	top: 0px !important;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) !important;
+}
+
+.toc-container::after {
+	bottom: 0 !important;
+	background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) !important;
+} */

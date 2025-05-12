@@ -1,0 +1,105 @@
+// src/utils/remarkProcessor.js
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import rehypeSanitize from 'rehype-sanitize';
+
+/**
+ * Create a configurable markdown processor using the unified/remark ecosystem
+ * This avoids importing problematic packages directly and instead uses specific modules
+ * @param {Object} options - Configuration options
+ * @returns {Function} - Function that processes markdown strings
+ */
+export function createMarkdownProcessor(options = {}) {
+  const {
+    gfm = true,
+    breaks = false,
+    sanitize = false,
+    highlight = true,
+    slug = true,
+  } = options;
+
+  // Start with the unified processor
+  let processor = unified().use(remarkParse);
+
+  // Add optional plugins based on configuration
+  if (gfm) {
+    processor = processor.use(remarkGfm);
+  }
+
+  if (breaks) {
+    // Use a simple breaks transformer instead of remark-breaks
+    processor = processor.use(() => (tree) => {
+      // Simple transformer that converts newlines in paragraphs to <br>
+      // This is a simplified version - you might need to enhance this
+      const visit = (node) => {
+        if (node.type === 'paragraph' && node.children) {
+          const newChildren = [];
+          node.children.forEach((child, i) => {
+            newChildren.push(child);
+            if (i < node.children.length - 1) {
+              newChildren.push({ type: 'break' });
+            }
+          });
+          node.children = newChildren;
+        }
+        
+        if (node.children) {
+          node.children.forEach(visit);
+        }
+      };
+      
+      visit(tree);
+    });
+  }
+
+  // Convert to HTML with rehype
+  processor = processor.use(remarkRehype);
+
+  // Add syntax highlighting
+  if (highlight) {
+    processor = processor.use(rehypeHighlight);
+  }
+
+  // Add slugs for headings
+  if (slug) {
+    processor = processor.use(rehypeSlug);
+  }
+
+  // Sanitize HTML if needed
+  if (sanitize) {
+    processor = processor.use(rehypeSanitize);
+  }
+
+  // Convert to HTML string
+  processor = processor.use(rehypeStringify);
+
+  // Return a function that processes markdown
+  return async (markdown) => {
+    try {
+      const result = await processor.process(markdown);
+      return String(result);
+    } catch (error) {
+      console.error('Error processing markdown:', error);
+      return `<div class="markdown-error">
+        <h3>Error Processing Markdown</h3>
+        <pre>${error.message}</pre>
+      </div>`;
+    }
+  };
+}
+
+// Create a default processor with common settings
+const defaultProcessor = createMarkdownProcessor({
+  gfm: true,
+  breaks: false,
+  sanitize: true,
+  highlight: true,
+  slug: true
+});
+
+export default defaultProcessor;

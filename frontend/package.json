@@ -1,0 +1,31 @@
+{
+	"name": "frontend",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@types/markdown-it": "*",
+		"markdown-it": "^13.0.1",
+		"markdown-it-anchor": "^8.6.7",
+		"markdown-it-highlightjs": "^4.0.1",
+		"path-browserify": "^1.0.1",
+		"process": "^0.11.10",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"stream-browserify": "^3.0.0",
+		"util": "^0.12.5",
+		"vite-plugin-node-polyfills": "^0.23.0"
+	},
+	"devDependencies": {
+		"@iconify/react": "^6.0.0",
+		"@types/react": "^18.0.17",
+		"@types/react-dom": "^18.0.6",
+		"@vitejs/plugin-react": "^4.4.1",
+		"vite": "^6.3.5"
+	}
+}
