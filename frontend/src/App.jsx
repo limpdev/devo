@@ -12,6 +12,8 @@ import { mark } from "@mdit/plugin-mark";
 import { sub } from "@mdit/plugin-sub";
 import { sup } from "@mdit/plugin-sup";
 import { tab } from "@mdit/plugin-tab";
+import { align } from "@mdit/plugin-align";
+import { spoiler } from "@mdit/plugin-spoiler";
 // Import Go functions
 import { GetBookData, GetMarkdownContent } from "../wailsjs/go/main/App";
 import { BrowserOpenURL } from "../wailsjs/runtime/runtime";
@@ -21,118 +23,138 @@ import "./App.css";
 
 // --- Custom JS Logic (Integrated) ---
 
-// CONVERTS GITHUB-STYLE CALLOUTS TO HTML
-function convertMarkdownCallouts(htmlText) {
-	if (!htmlText) return "";
-	const calloutTypes = {
-		NOTE: '<i class="note-icon">󱞁</i>', // Using appropriate icons or text
-		TIP: '<i class="tip-icon">󰴓</i>',
-		IMPORTANT: '<i class="important-icon">󱁯</i>',
-		WARNING: '<i class="warning-icon">󰉀</i>',
-		CAUTION: '<i class="caution-icon"></i>',
-		HINT: '<i class="hint-icon">󰴓</i>',
-	};
-	const calloutRegex = /\<blockquote\>\s*<p>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|HINT)\]\s*([\s\S]*?)<\/p>\s*\<\/blockquote\>/gm
-	return htmlText.replace(calloutRegex, function (match, type, content) {
-		const normalizedType = type.toUpperCase();
-		const calloutType = Object.keys(calloutTypes).includes(normalizedType) ? normalizedType : "NOTE";
-		const processedContent = content.trim(); // Basic trim, React would handle complex tags better if it rendered them
+// WIP - COPY BUTTONS FOR CODEBLOCKS
+function addCopyButtonsToCodeBlocks(containerElement) {
+    if (!containerElement) return;
 
-		// Ensure <p> tags wrap content if not already present (markdown-it might add them)
-		const finalContent = processedContent.startsWith("<p>") ? processedContent : `<p>${processedContent}</p>`;
+    const preElements = containerElement.querySelectorAll("pre");
 
-		return `<div class="callout callout-${calloutType.toLowerCase()}">
-      <div class="callout-header">
-        <span class="callout-icon">${calloutTypes[calloutType]}</span>
-        <span class="callout-title">${calloutType}</span>
-      </div>
-      <div class="callout-content">
-        ${finalContent}
-      </div>
-    </div>`;
-	});
+    preElements.forEach((preEl) => {
+        // Avoid re-wrapping if already processed (e.g., by a hot reload or manual call)
+        if (preEl.parentElement && preEl.parentElement.classList.contains("code-wrapper")) {
+            return;
+        }
+
+        const codeEl = preEl.querySelector("code");
+        if (!codeEl) return; // Only add buttons to pre tags containing code
+
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.className = "code-wrapper"; // You'll style this with position: relative
+
+        const copyButton = document.createElement("button");
+        copyButton.className = "clip-button"; // Your existing or new class for styling
+        copyButton.setAttribute("aria-label", "Copy to clipboard");
+        copyButton.setAttribute("title", "Copy to clipboard");
+
+        // Initial SVG icon for the copy button (simple clipboard)
+        copyButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M4 14L14 3v7h6L10 21v-7z"/>
+            </svg>
+        `;
+
+        // DOM manipulation:
+        // Insert wrapper before the pre element
+        preEl.parentNode.insertBefore(wrapperDiv, preEl);
+        // Append the copy button to the wrapper
+        wrapperDiv.appendChild(copyButton);
+        // Move the pre element inside the wrapper
+        wrapperDiv.appendChild(preEl);
+
+        // Optional: Add language label (if you want it, like in templates/index.html)
+        const language = codeEl.className.match(/language-(\w+)/);
+        if (language && language[1]) {
+            const langLabel = document.createElement('span');
+            langLabel.className = 'language-label';
+            langLabel.textContent = language[1];
+            wrapperDiv.insertBefore(langLabel, preEl); // Or append to wrapperDiv
+        }
+    });
 }
 
-// MARK TAGS FOR TEXT - AKA, Highlighting!
-function addMarkTags(text) {
-	if (!text) return "";
-	const markRegex = /==(.*?)==/g;
-	return text.replace(markRegex, `<mark>$1</mark>`);
-}
 
 // Logic for handling clicks on dynamically added copy buttons
 function setupCopyButtonListeners(containerElement) {
-	if (!containerElement) return []; // Return empty array if no container
+	if (!containerElement) return [];
 
-	const buttons = containerElement.querySelectorAll("pre code.hljs + .clip-button, pre code + .clip-button"); // Be more specific if highlightjs adds button differently
+    // UPDATED selector to find buttons within the new wrapper
+	const buttons = containerElement.querySelectorAll(".code-wrapper .clip-button");
 	const listeners = [];
 
 	buttons.forEach((button) => {
-		const pre = button.closest("pre");
+        // UPDATED logic to find the code block
+        const wrapper = button.closest(".code-wrapper");
+		const pre = wrapper ? wrapper.querySelector("pre") : null;
 		const codeBlock = pre ? pre.querySelector("code") : null;
 
-		if (!codeBlock) return; // Skip if structure isn't as expected
+		if (!codeBlock) {
+            console.warn("Copy button found without a corresponding code block.", button);
+            return;
+        }
 
 		const clickHandler = async () => {
 			try {
 				await navigator.clipboard.writeText(codeBlock.innerText);
 
-				// --- Visual Feedback ---
 				const svg = button.querySelector("svg");
-				if (!svg) return; // Skip if no SVG
+				if (!svg) return;
 
-				// Save original state
 				const originalViewBox = svg.getAttribute("viewBox");
 				const originalWidth = svg.getAttribute("width");
 				const originalHeight = svg.getAttribute("height");
-				const originalFill = svg.getAttribute("fill"); // May be null
+				const originalFill = svg.getAttribute("fill");
 				const originalHtml = svg.innerHTML;
 				const originalAriaLabel = button.getAttribute("aria-label");
+                const originalTitle = button.getAttribute("title");
 
-				// Apply success state
-				svg.innerHTML = ""; // Clear existing paths/etc.
-				svg.setAttribute("viewBox", "0 0 24 24");
-				// Ensure consistent size, might need adjustment based on original CSS/size
-				// svg.setAttribute("width", "1.5em");
-				// svg.setAttribute("height", "1.5em");
-				svg.setAttribute("fill", "var(--hl-green, green)"); // Use CSS variable or fallback
+				svg.innerHTML = "";
+				svg.setAttribute("viewBox", "0 0 24 24"); // Standard checkmark viewBox
+                // Keep existing width/height or set explicitly if needed
+				// svg.setAttribute("width", "16");
+				// svg.setAttribute("height", "16");
+				svg.setAttribute("fill", "var(--hl-green, green)");
 
 				const successPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
 				successPath.setAttribute(
 					"d",
-					"M9.5 18.5l-5.5-5.5l1.41-1.41l4.09 4.09l8.59-8.59l1.41 1.41L9.5 18.5z", // Simple checkmark
+					"M10 2a3 3 0 0 0-2.83 2H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1.17A3 3 0 0 0 14 2zM9 5a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1m6.78 6.625a1 1 0 1 0-1.56-1.25l-3.303 4.128l-1.21-1.21a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.488-.082l4-5z",
 				);
 				svg.appendChild(successPath);
 				button.setAttribute("aria-label", "Copied!");
-				button.classList.add("copied"); // Add class for potential styling
+                button.setAttribute("title", "Copied!");
+				button.classList.add("copied");
 
-				// Reset after 2 seconds
 				setTimeout(() => {
-					svg.innerHTML = originalHtml; // Restore original content
-					svg.setAttribute("viewBox", originalViewBox);
-					svg.setAttribute("width", originalWidth);
-					svg.setAttribute("height", originalHeight);
-					if (originalFill) svg.setAttribute("fill", originalFill);
-					else svg.removeAttribute("fill");
+					svg.innerHTML = originalHtml;
+					if (originalViewBox) svg.setAttribute("viewBox", originalViewBox); else svg.removeAttribute("viewBox");
+					if (originalWidth) svg.setAttribute("width", originalWidth); else svg.removeAttribute("width");
+					if (originalHeight) svg.setAttribute("height", originalHeight); else svg.removeAttribute("height");
+					if (originalFill) svg.setAttribute("fill", originalFill); else svg.removeAttribute("fill");
 					button.setAttribute("aria-label", originalAriaLabel || "Copy to clipboard");
-					button.classList.remove("copied"); // Remove class
+                    button.setAttribute("title", originalTitle || "Copy to clipboard");
+					button.classList.remove("copied");
 				}, 2000);
 			} catch (err) {
 				console.error("Failed to copy code:", err);
+                const originalAriaLabel = button.getAttribute("aria-label"); // Capture before changing
+                const originalTitle = button.getAttribute("title");
 				button.setAttribute("aria-label", "Copy failed!");
-				// Optionally provide visual feedback for error
+                button.setAttribute("title", "Copy failed!");
+                setTimeout(() => { // Revert error message after a bit
+                    button.setAttribute("aria-label", originalAriaLabel || "Copy to clipboard");
+                    button.setAttribute("title", originalTitle || "Copy to clipboard");
+                }, 2000);
 			}
 		};
 
 		button.addEventListener("click", clickHandler);
-		// Store the button and handler for cleanup
 		listeners.push({ element: button, type: "click", handler: clickHandler });
 	});
 
-	return listeners; // Return the array of added listeners
+	return listeners;
 }
 
-// Logic for creating ripple effect on click
+// WORKS - Ripple Effect
 function handleGlobalClickForRipple(e) {
 	// Ignore clicks on buttons or interactive elements if desired
 	if (e.target.closest("button, a, input, select, textarea")) {
@@ -161,13 +183,29 @@ function handleGlobalClickForRipple(e) {
 	circle.setAttribute("r", "0");
 	// Use a CSS variable or a default color for the ripple
 	circle.setAttribute("fill", "var(--ripple-color, rgba(168, 168, 168, 0.7))");
-	circle.style.opacity = "1"; // Start fully opaque
+	circle.style.opacity = "0.7"; // Start fully opaque
 
-	// Use CSS animations instead of SMIL for better compatibility & control
-	circle.style.animation = "ripple-radius 0.5s cubic-bezier(.52,.6,.25,.99) forwards, ripple-opacity 0.5s linear 0.1s forwards"; // Delay opacity fade slightly
-
+	// Create animate elements
+	const animateRadius = document.createElementNS(svgNS, 'animate');
+	animateRadius.setAttribute('attributeName', 'r');
+	animateRadius.setAttribute('calcMode', 'spline');
+	animateRadius.setAttribute('dur', '0.4s');
+	animateRadius.setAttribute('keySplines', '.52,.6,.25,.99');
+	animateRadius.setAttribute('values', '0;11');
+	animateRadius.setAttribute('fill', 'freeze');
+	const animateOpacity = document.createElementNS(svgNS, 'animate');
+	animateOpacity.setAttribute('attributeName', 'opacity');
+	animateOpacity.setAttribute('calcMode', 'spline');
+	animateOpacity.setAttribute('dur', '0.4s');
+	animateOpacity.setAttribute('keySplines', '.52,.6,.25,.99');
+	animateOpacity.setAttribute('values', '1;0');
+	animateOpacity.setAttribute('fill', 'freeze');
+	// Assemble the SVG
+	circle.appendChild(animateRadius);
+	circle.appendChild(animateOpacity);
 	svg.appendChild(circle);
 	rippleContainer.appendChild(svg);
+	// Append the ripple container to the body
 	document.body.appendChild(rippleContainer);
 
 	// Remove after animation completes (adjust time if animation duration changes)
@@ -177,15 +215,6 @@ function handleGlobalClickForRipple(e) {
 		}
 	}, 600); // A bit longer than animation duration
 }
-
-// Define the CSS animations (add this to your App.css or index.css)
-// @keyframes ripple-radius { 
-//  to { r: 12; } // Animate radius to fill the 24x24 viewbox
-// }
-// @keyframes ripple-opacity {
-//   to { opacity: 0; }
-// }
-// END OF CUSTOM LOGIC
 
 // --- REACT COMPONENT ---
 // Initialize markdown-it with plugins
@@ -204,70 +233,74 @@ const md = new MarkdownIt({
 	.use(mark)
 	.use(sub)
 	.use(sup)
-	.use(tab, {
-		name: "tab",
-		tabRender: (tokens, index, _options) => {
+	.use(align)
+	.use(spoiler)
+	.use(tab)
+	.use(container, {
+		name: "warning",
+		openRender: (tokens, index, _options) => {
 			const token = tokens[index];
 			if (token.nesting === 1) {
-				return `<nav class="tab-inline"><p class="tab-title">${token.info}</p>\n`;
+				return `<div class="custom-block warning"><em class="custom-block-title"> Warning</em>\n`;
 			} else {
 				return `</div>\n`;
 			}
-		}
+		},
 	})
-	.use(container, { name: "warning",
+	.use(container, {
+		name: "caution",
 		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block warning"><p class="custom-block-title">⚠️ Warning</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<div class="custom-block caution"><em class="custom-block-title"> Caution</em>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		},
 	})
-	.use(container, { name: "caution",
+	.use(container, {
+		name: "tip",
 		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block caution"><p class="custom-block-title">🛑 Caution</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<div class="custom-block tip"><em class="custom-block-title"> Tip</em>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		},
 	})
-	.use(container, { name: "tip",
+	.use(container, {
+		name: "note",
 		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block tip"><p class="custom-block-title"> Tip</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<div class="custom-block note"><em class="custom-block-title"> Note</em>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		},
 	})
-	.use(container, { name: "note",
+	.use(container, {
+		name: "hint",
 		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block note"><p class="custom-block-title"> Note</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<div class="custom-block hint"><em class="custom-block-title"> Hint</em>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		},
 	})
-	.use(container, { name: "hint",
+	.use(container, {
+		name: "important",
 		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block hint"><p class="custom-block-title"> Hint</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
-	})
-	.use(container, { name: "important",
-		openRender: (tokens, index, _options) => {
-      const token = tokens[index];
-      if (token.nesting === 1) {
-        return `<div class="custom-block important"><p class="custom-block-title"> Important</p>\n`;
-      } else {
-        return `</div>\n`;
-	  }}
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<div class="custom-block important"><em class="custom-block-title"> Important</em>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		},
 	});
 
 function App() {
@@ -328,8 +361,8 @@ function App() {
 		fetchInitialBookData();
 	}, []);
 
-	const loadChapter = useCallback(
-		async (relativePath) => {
+	const [isTransitioning, setIsTransitioning] = useState(false);
+	const loadChapter = useCallback(async (relativePath) => {
 			if (!relativePath || !relativePath.toLowerCase().endsWith(".md")) {
 				console.warn("Attempted to load non-markdown file as chapter:", relativePath);
 				return;
@@ -339,6 +372,8 @@ function App() {
 				console.log("Chapter already loaded:", relativePath);
 				return;
 			}
+		setIsTransitioning(true); 	// Triggers FADEOUT via className
+		setTimeout(async () => { 	// Wait for FADEOUT
 			setIsLoadingContent(true);
 			try {
 				console.log(`Fetching markdown for: ${relativePath}`);
@@ -354,10 +389,14 @@ function App() {
 				// Optionally set currentPath to an error state or keep previous
 			} finally {
 				setIsLoadingContent(false);
+				// The useEffect for currentMarkdown will render.
+            	// Then we remove the transitioning state to allow fade-in.
+           		// This might need a slight delay or a ref to the content div
+            	// to ensure DOM is updated before changing opacity.
+				setIsTransitioning(false); // Triggers FADEIN, or, resets to default
 			}
-		},
-		[currentPath, currentMarkdown],
-	); // Add dependencies for useCallback
+		}, 300);
+	}, [currentPath, currentMarkdown]);
 
 	// Handle link clicks within the processed HTML
 	const handleLinkClick = useCallback(
@@ -458,41 +497,24 @@ function App() {
 	// --- CUSTOM: Process Markdown -> HTML -> Apply Customizations -> Render ---
 	useEffect(() => {
 		const contentEl = document.querySelector(".markdown-content");
-		if (!contentEl) return; // Ensure target element exists
+		if (!contentEl) return;
 		if (!currentMarkdown) {
-			contentEl.innerHTML = ""; // Clear content if markdown is empty
+			contentEl.innerHTML = "";
 			return;
 		}
 		try {
-			// 1. Render Markdown to HTML
 			let htmlContent = md.render(currentMarkdown);
-			// 2. Process image paths (needs currentPath)
-			htmlContent = processImages(htmlContent);
-			// 3. Apply custom HTML transformations (Callouts, Marks)
-			htmlContent = convertMarkdownCallouts(htmlContent);
-			htmlContent = addMarkTags(htmlContent);
-			// 4. Set the final HTML
-			contentEl.innerHTML = htmlContent;
-			// Note: Copy button listeners are handled in a separate effect below
+			htmlContent = processImages(htmlContent); // Process images first
+			contentEl.innerHTML = htmlContent; // Set HTML
+
+            // MODIFIED: Call to add copy buttons AFTER HTML is set
+			addCopyButtonsToCodeBlocks(contentEl);
+
 		} catch (error) {
 			console.error("Error processing markdown or applying customisations:", error);
 			contentEl.innerHTML = `<div class="error">Failed to render content: ${error.message}</div>`;
 		}
-	}, [currentMarkdown, processImages]); // Rerun when markdown changes or image processing logic changes (due to currentPath)
-
-	// --- Effect for setting up Copy Button Listeners ---
-	useEffect(() => {
-		const contentEl = document.querySelector(".markdown-content");
-		if (!contentEl) return;
-		// Setup listeners and get the list of added listeners
-		const addedListeners = setupCopyButtonListeners(contentEl);
-		// Cleanup function: Remove all listeners added by this effect instance
-		return () => {
-			addedListeners.forEach(({ element, type, handler }) => {
-				element.removeEventListener(type, handler);
-			});
-		};
-	}, [currentMarkdown]); // Rerun when markdown content changes (which implies HTML changed)
+	}, [currentMarkdown, processImages]); // Rerun when markdown changes
 
 	// --- Effect for Global Ripple Effect ---
 	useEffect(() => {
@@ -504,22 +526,28 @@ function App() {
 		};
 	}, []); // Empty dependency array: Runs once on mount, cleans up on unmount
 
-	// Process HTML whenever it changes
+	// --- Effect for setting up Copy Button Listeners ---
+	// This effect now runs *after* the markdown content is rendered and buttons are added
 	useEffect(() => {
-		if (!currentHtml) return;
-
-		const processedHtml = processImages(currentHtml);
-		// We're setting the HTML directly instead of using ReactMarkdown
 		const contentEl = document.querySelector(".markdown-content");
-		if (contentEl) {
-			contentEl.innerHTML = processedHtml;
-		}
-	}, [currentHtml, processImages]);
+		if (!contentEl || !currentMarkdown) return; // Also check currentMarkdown to avoid running on empty content
+
+		const addedListeners = setupCopyButtonListeners(contentEl);
+		return () => {
+			addedListeners.forEach(({ element, type, handler }) => {
+				element.removeEventListener(type, handler);
+			});
+		};
+        // DEPENDENCY: currentMarkdown changing means HTML changed, so re-run.
+        // processImages is not directly used by setupCopyButtonListeners, but
+        // currentMarkdown implies that both processImages and addCopyButtonsToCodeBlocks
+        // have potentially run.
+	}, [currentMarkdown]);
 
 	return (
 		<div id="app-container">
 			<div className="title-bar" style={{ "--wails-draggable": "drag" }}>
-				<div className="title-bar-text">   </div>
+				<div className="title-bar-text">  </div>
 				<div className="window-controls">
 					<button onClick={handleMinimize} className="window-button minimize" aria-label="Minimize">
 						<Icon icon="solar:minimize-square-3-line-duotone" width="11" height="11" style={{ color: "#ffffff40" }} />

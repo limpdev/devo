@@ -9,15 +9,18 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@mdit/plugin-align": "^0.18.0",
 		"@mdit/plugin-container": "^0.18.0",
 		"@mdit/plugin-katex": "^0.18.0",
 		"@mdit/plugin-mark": "^0.18.0",
+		"@mdit/plugin-spoiler": "^0.18.0",
 		"@mdit/plugin-sub": "^0.18.0",
 		"@mdit/plugin-sup": "^0.18.0",
 		"@mdit/plugin-tab": "^0.18.0",
 		"@types/markdown-it": "*",
 		"markdown-it": "^13.0.1",
 		"markdown-it-anchor": "^8.6.7",
+		"markdown-it-code-copy": "^0.2.2",
 		"markdown-it-highlightjs": "^4.0.1",
 		"path-browserify": "^1.0.1",
 		"process": "^0.11.10",

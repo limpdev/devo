@@ -32,18 +32,6 @@ func (a *App) shutdown(ctx context.Context) {
 	log.Println("Cleanup finished. Goodbye!")
 }
 
-func (a *App) ClipboardGetText(ctx context.Context) (string, error) {
-	// Implement your logic to get text from the clipboard here
-	log.Println("Get Text triggered")
-	return "", nil
-}
-
-func (a *App) ClipboardSetText(ctx context.Context) (string, error) {
-	// Implement your logic to set text to the clipboard here
-	log.Println("Set Text triggered")
-	return "", nil
-}
-
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Welcome, %s, your home for knowledge", name)

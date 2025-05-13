@@ -14,7 +14,7 @@ import (
 )
 
 //go:embed all:frontend/dist
-var assets embed.FS // Keep for build process, but not used for serving in this config
+var assets embed.FS // Embeds the React frontend (HTML, CSS, JS, etc.) into the binary.
 
 func main() {
 	// Create an instance of the app structure
@@ -42,8 +42,8 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 16, G: 16, B: 16, A: 1},
 		Windows: &windows.Options{
-			WebviewIsTransparent: true, // Allows underlying window/desktop to show if HTML is *also* transparent
-			WindowIsTranslucent:  true, // Usually false unless you want the whole window semi-transparent
+			WebviewIsTransparent: true,  // Allows underlying window/desktop to show if HTML is *also* transparent
+			WindowIsTranslucent:  false, // Usually false unless you want the whole window semi-transparent
 			DisablePinchZoom:     true,
 		},
 		Mac: &mac.Options{
