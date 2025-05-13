@@ -6,7 +6,12 @@ import { Icon } from "@iconify/react";
 import MarkdownIt from "markdown-it";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItHighlight from "markdown-it-highlightjs";
-
+import { container } from "@mdit/plugin-container";
+import { katex } from "@mdit/plugin-katex";
+import { mark } from "@mdit/plugin-mark";
+import { sub } from "@mdit/plugin-sub";
+import { sup } from "@mdit/plugin-sup";
+import { tab } from "@mdit/plugin-tab";
 // Import Go functions
 import { GetBookData, GetMarkdownContent } from "../wailsjs/go/main/App";
 import { BrowserOpenURL } from "../wailsjs/runtime/runtime";
@@ -194,7 +199,76 @@ const md = new MarkdownIt({
 		permalinkSymbol: " 󰓼",
 		permalinkSpace: false,
 	})
-	.use(markdownItHighlight);
+	.use(markdownItHighlight)
+	.use(katex)
+	.use(mark)
+	.use(sub)
+	.use(sup)
+	.use(tab, {
+		name: "tab",
+		tabRender: (tokens, index, _options) => {
+			const token = tokens[index];
+			if (token.nesting === 1) {
+				return `<nav class="tab-inline"><p class="tab-title">${token.info}</p>\n`;
+			} else {
+				return `</div>\n`;
+			}
+		}
+	})
+	.use(container, { name: "warning",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block warning"><p class="custom-block-title">⚠️ Warning</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	})
+	.use(container, { name: "caution",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block caution"><p class="custom-block-title">🛑 Caution</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	})
+	.use(container, { name: "tip",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block tip"><p class="custom-block-title"> Tip</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	})
+	.use(container, { name: "note",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block note"><p class="custom-block-title"> Note</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	})
+	.use(container, { name: "hint",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block hint"><p class="custom-block-title"> Hint</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	})
+	.use(container, { name: "important",
+		openRender: (tokens, index, _options) => {
+      const token = tokens[index];
+      if (token.nesting === 1) {
+        return `<div class="custom-block important"><p class="custom-block-title"> Important</p>\n`;
+      } else {
+        return `</div>\n`;
+	  }}
+	});
 
 function App() {
 	const [toc, setToc] = useState([]);

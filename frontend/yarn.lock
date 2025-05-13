@@ -347,6 +347,68 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@mdit/helper@0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/helper/-/helper-0.18.0.tgz#90c6f6e638c17f406959d3d24b1309a12f3fc68e"
+  integrity sha512-/4w+hKHmJUutRhmwX8w7dpYW4lgaNXW055m/x+apvemLGlDoRd3VZbAR5Gt0zWdkE0l4b5FWqbydiig9Sgj5gQ==
+  dependencies:
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-container@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-container/-/plugin-container-0.18.0.tgz#d4dba0ad73505c4a7a0dc4207aa6ce1442e60322"
+  integrity sha512-lNXFxhgPU44UmrElp5oRUGUYx4q0Nkta6BYDC7tYIzqk3BBJLccBMv2iI0Hejz+LFTRytyMUBAuxh/F+i1DsGw==
+  dependencies:
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-katex@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-katex/-/plugin-katex-0.18.0.tgz#9fb2066bd5ee2a94b23c469eebc16d2a4067575c"
+  integrity sha512-LioIueFcJUBZL5IbAhcvB0JZEQMb3eLza9bk1u3Xl+/cQ84Ld0WcfEsk5iEXkGa0ckM22pIlJg6XzAA3uck97Q==
+  dependencies:
+    "@mdit/helper" "0.18.0"
+    "@mdit/plugin-tex" "0.18.0"
+    "@types/markdown-it" "^14.1.2"
+    katex "0.16.22"
+
+"@mdit/plugin-mark@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-mark/-/plugin-mark-0.18.0.tgz#d2af63b4157e0a35aa566aaefdf97f24c56ae17f"
+  integrity sha512-mFEUrNV63z6Os5r5cZzjjdVaU5pz6YdwON8jM71h6HTgaM5EjsXm2c4zyfnUdN24lWz+O6gaYw67inhAFxZGwg==
+  dependencies:
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-sub@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-sub/-/plugin-sub-0.18.0.tgz#49c05e4d4301a20b5a96f7f82fc387d2cfbe2b03"
+  integrity sha512-VqNwTeUjbLP2AZv9WGbGJPY7q32nf24fkFbuXlalzJk5FNArOo4qHCqWmswjBmfGWbtG5ZkrRM0v+f4adRELrQ==
+  dependencies:
+    "@mdit/helper" "0.18.0"
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-sup@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-sup/-/plugin-sup-0.18.0.tgz#4bc79eadede805e15dba766ced80d46371faa012"
+  integrity sha512-2l5BcRrZfivZi2vwrC/an4K/wZYsgA1k8m4VGgOcDllTKUW8IQHAmievYo7IuAwvY3CwBdqEtc5s0DHlHRFdnQ==
+  dependencies:
+    "@mdit/helper" "0.18.0"
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-tab@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-tab/-/plugin-tab-0.18.0.tgz#a7a0de6f247eedbd6e70f13b1cb749256aeddfc1"
+  integrity sha512-nM/cqa8q7x2L6bXkrmePk9IEaSONhxIkgTVsmM4b6PQ3zoXq83SxGR+8vC7AFhiRYAjmtV8psBjy1pyUtY4Syw==
+  dependencies:
+    "@mdit/helper" "0.18.0"
+    "@types/markdown-it" "^14.1.2"
+
+"@mdit/plugin-tex@0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mdit/plugin-tex/-/plugin-tex-0.18.0.tgz#a8ba3e5bb1faf6deaefc0f73b5ca7ec933aebb08"
+  integrity sha512-k4xSML1N6gFkCm/zsiRO1eI0IFpi+Nr6WcYs1Y8NojyuIgDUZSrKbIJTwuqIo/TrCUfgUQANpibYskRxQpgZLg==
+  dependencies:
+    "@types/markdown-it" "^14.1.2"
+
 "@rollup/plugin-inject@^5.0.5":
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-inject/-/plugin-inject-5.0.5.tgz#616f3a73fe075765f91c5bec90176608bed277a3"
@@ -542,7 +604,7 @@
   resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-5.0.0.tgz#21413001973106cda1c3a9b91eedd4ccd5469d76"
   integrity sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==
 
-"@types/markdown-it@*":
+"@types/markdown-it@*", "@types/markdown-it@^14.1.2":
   version "14.1.2"
   resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.1.2.tgz#57f2532a0800067d9b934f3521429a2e8bfb4c61"
   integrity sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==
@@ -906,6 +968,11 @@ color-name@1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
+
+commander@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
+  integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
 
 configstore@^3.0.0:
   version "3.1.5"
@@ -1765,6 +1832,13 @@ jsonfile@^4.0.0:
   integrity sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+katex@0.16.22:
+  version "0.16.22"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.22.tgz#d2b3d66464b1e6d69e6463b28a86ced5a02c5ccd"
+  integrity sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==
+  dependencies:
+    commander "^8.3.0"
 
 keyv@^4.0.0:
   version "4.5.4"

@@ -1237,63 +1237,72 @@ pre {
 .language-label:hover {
 	opacity: 0.8;
 }
-.callout {
-	padding: 0;
-	margin-bottom: 16px;
+/* CALLOUTS W/ MARKDOWN-IT SYNTAX */
+.tip,
+.note,
+.hint,
+.warning,
+.caution,
+.important {
+	margin: 7px;
 	border-left: 4px solid #d0d7de;
-	border-radius: 8px;
+	border-radius: 7px;
 	overflow: hidden;
-}
-.callout-header {
-	padding: 8px 16px;
-	display: flex;
+	padding: 6px 6px 6px 6px;
+	display: block;
 	align-items: center;
-	font-weight: 600;
 }
-.callout-icon {
-	margin-right: 8px;
+
+.custom-block-title {
+	position: relative;
+	font-size: 1.1em;
+	align-self: start;
+	padding: 0px;
 }
-.callout-content {
-	padding: 0 16px 16px;
+
+.tip > p,
+.note > p,
+.hint > p,
+.warning > p,
+.caution > p,
+.important > p {
+	/* padding: 0 16px 16px; */
+	font-size: 0.95em;
+	font-weight: 500;
+	padding: 10px;
 }
-.callout-content p {
-	margin: 0;
-}
-.callout-note {
+
+.note {
 	border-left-color: #0969da;
-	background: #171b29;
+	background: #456af010;
 }
-.callout-note .callout-header {
-	color: #0969da;
-}
-.callout-tip {
+
+.tip {
 	border-left-color: #1a7f37;
-	background: #121e1d;
+	background: #54f39c10;
 }
-.callout-tip .callout-header {
-	color: #1a7f37;
+
+.hint {
+	border-left-color: #f6c02e;
+	background: #8cd0dd86;
 }
-.callout-important {
+
+.important {
 	border-left-color: #8250df;
-	background: #1b192a;
+	background: #6654f110;
 }
-.callout-important .callout-header {
-	color: #8250df;
-}
-.callout-warning {
+
+.warning {
 	border-left-color: #9a6700;
-	background: #24201a;
+	background: #f5ae4410;
 }
-.callout-warning .callout-header {
-	color: #9a6700;
-}
-.callout-caution {
+
+.caution {
 	border-left-color: #cf222e;
-	background: #26181c;
+	background: #ed386b10;
 }
-.callout-caution .callout-header {
-	color: #cf222e;
-}
+
+/* SELECTED TEXT STYLE */
 ::selection {
 	background-color: #91919150;
 }

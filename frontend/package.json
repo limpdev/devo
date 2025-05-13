@@ -9,6 +9,12 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@mdit/plugin-container": "^0.18.0",
+		"@mdit/plugin-katex": "^0.18.0",
+		"@mdit/plugin-mark": "^0.18.0",
+		"@mdit/plugin-sub": "^0.18.0",
+		"@mdit/plugin-sup": "^0.18.0",
+		"@mdit/plugin-tab": "^0.18.0",
 		"@types/markdown-it": "*",
 		"markdown-it": "^13.0.1",
 		"markdown-it-anchor": "^8.6.7",
