@@ -4,3 +4,6 @@ frontend/dist
 book/LimpBook
 *.exe
 desktop.ini
+Desktop.ini
+*.icns
+templates/*
