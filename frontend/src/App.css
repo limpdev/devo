@@ -154,3 +154,41 @@ button.clip-button:after svg {
 button.clip-button:active svg {
 	opacity: 1;
 }
+
+.toc-footer {
+	font-family: "Jost", "Symbols Nerd Font", sans-serif;
+	font-size: 10px;
+	z-index: 10;
+	display: flex;
+	position: fixed;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0;
+	top: 65px;
+    left: 7px;
+}
+
+.openFolderButton {
+	display: flow;
+	border: 1px solid #ce966220;
+	align-items: anchor-center;
+	border-radius: 7px;
+	/* margin-top: 25px;
+	margin-left: 45px; */
+	background: transparent;
+	opacity: 0.3;
+	transition: all 500ms ease-in-out;
+}
+
+.openFolderButton:hover {
+	opacity: 1;
+	background-color: #303030;
+}
+
+.openFolderButton > svg {
+	width: 17px;
+	stroke: #ce9662aa;
+	transition: all 300ms ease-in-out;
+	padding: 1px;
+	padding-left: 5px;
+}

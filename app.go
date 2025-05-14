@@ -5,8 +5,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"            // For file operations
+	"os"
+	"os/exec"       // For file operations
 	"path/filepath" // For path manipulation
+	"runtime"
 )
 
 // App struct
@@ -143,4 +145,20 @@ func (a *App) GetBookData() (BookData, error) {
 
 	log.Printf("Successfully loaded book data. Initial chapter: %s", firstChapterRelPath)
 	return bookData, nil // Return nil error if TOC parsed, even if initial content failed (error is in BookData.Error)
+}
+
+// OpenFolder   CONTENT PATH
+func (a *App) OpenFolder(path string) error {
+	var cmd *exec.Cmd
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("explorer", path)
+	case "darwin":
+		cmd = exec.Command("open", path)
+	case "linux":
+		cmd = exec.Command("xdg-open", path)
+	default:
+		return fmt.Errorf("unsupported platform")
+	}
+	return cmd.Start()
 }

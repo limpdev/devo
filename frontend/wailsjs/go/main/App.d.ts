@@ -9,6 +9,8 @@ export function GetMarkdownContent(arg1:string):Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
 
+export function OpenFolder(arg1:string):Promise<void>;
+
 export function WindowReload(arg1:context.Context):Promise<void>;
 
 export function WindowReloadApp(arg1:context.Context):Promise<void>;
