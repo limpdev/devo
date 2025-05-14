@@ -1,3 +1,76 @@
+# New Business
+
+==Creating menus, of various types==   Define a `struct` and call the runtime method, `MenuSetApplicationMenu`.
+
+```go
+    app := NewApp()
+
+    AppMenu := menu.NewMenu()
+    if runtime.GOOS == "darwin" {
+        AppMenu.Append(menu.AppMenu()) // On macOS platform, this must be done right after `NewMenu()`
+    }
+    FileMenu := AppMenu.AddSubmenu("File")
+    FileMenu.AddText("&Open", keys.CmdOrCtrl("o"), func(_ *menu.CallbackData) {
+        // do something
+    })
+    FileMenu.AddSeparator()
+    FileMenu.AddText("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
+        // `rt` is an alias of "github.com/wailsapp/wails/v2/pkg/runtime" to prevent collision with standard package
+        rt.Quit(app.ctx)
+    })
+
+    if runtime.GOOS == "darwin" {
+    AppMenu.Append(menu.EditMenu())  // On macOS platform, EditMenu should be appended to enable Cmd+C, Cmd+V, Cmd+Z... shortcuts
+    }
+
+    err := wails.Run(&options.App{
+        Title:             "Menus Demo",
+        Width:             800,
+        Height:            600,
+        Menu:              AppMenu, // reference the menu above
+        Bind: []interface{}{
+            app,
+        },
+    )
+    // ...
+```
+**Dynamically Updating the Menu**  use `MenuUpdateApplicationMenu`. Menus are just collections of `MenuItems`.
+
+```go
+type Menu struct {
+	Items []*MenuItem
+}
+
+// ...
+
+func NewMenuFromItems(first *MenuItem, rest ...*MenuItem) *Menu
+
+// Structs for individual MenuItems, too
+// MenuItem represents a menu item contained in a menu
+type MenuItem struct {
+    Label string						// STRING - the menu text
+    Role Role							// *keys.Accelerator - keybinding
+    Accelerator *keys.Accelerator		// TYPE - the type of MenuItem
+    Type Type							// Disables the menu item
+    Disabled bool						// Hides this item
+    Hidden bool							// Adds check to item
+    Checked bool						// Sets the submenu
+    SubMenu *Menu						// Callback function when menu clicked
+    Click Callback						// Defines a role for this menu item. MAC ONLY
+}
+```
+
+::: important
+The next step should be to create a **RIGHT-CLICK MENU**
+:::
+
+---
+---
+
+## FILES SUMMARIZED
+
+<details><summary><i>Repository Files</i></summary>
+
 ## `app.go`
 
 ```go
@@ -2841,3 +2914,4 @@ func main() {
 </html>
 ```
 
+</details>
