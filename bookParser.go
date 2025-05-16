@@ -1,4 +1,3 @@
-// app.go (or bookParser.go)
 package main
 
 import (
