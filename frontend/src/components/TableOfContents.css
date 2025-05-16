@@ -1,80 +1,104 @@
 /* frontend/src/components/TableOfContents.css */
-.toc-container {
-	width: 280px;
-	/* Adjust as needed */
-	min-width: 200px;
-	max-height: 85vh;
-	/* Fill the height of its flex container */
-	overflow-y: auto;
-	background-color: linear-gradient(to left, #09090a 0%, #1616161 100%);
-	/* Slightly different background */
-	padding: 15px 0px;
-	/* Add some top/bottom padding, no side for full-width feel of items */
-	border-right: 1px solid #3a3a3eaa;
-	box-sizing: border-box;
-	align-self: anchor-center;
-	cursor: var(--crosshair), auto;
+
+nav {
+	cursor: var(--crosshair);
 }
 
-nav>ul>li>ul>li>a {
-	color: #aaa;
+.toc-container {
+	padding: 10px;
+	background-color: transparent;
+	color: #ecf0f1;
+	overflow-y: auto;
+	text-decoration: none;
+	height: 80vh;
+	align-self: center;
 }
 
 .toc-container ul {
-	list-style: none;
-	padding-left: 0;
+	list-style-type: none;
+	padding-left: 0; /* Base ul has no padding, indentation is per item */
 	margin: 0;
 }
 
 .toc-container li {
-	margin: 0;
-	/* Remove default li margins */
+	margin-bottom: 2px; /* Optional: small space between list items */
+}
+
+.toc-item-row {
+	display: flex;
+	align-items: center;
+	/* padding-left is now applied via inline style for dynamic indentation */
+	min-height: 24px; /* Ensure consistent row height */
+}
+
+.toc-toggle-button {
+	background: none;
+	border: none;
+	color: inherit; /* Or a specific color for the toggle */
+	cursor: var(--crosshair);
+	padding: 0 4px 0 0; /* Adjust as needed */
+	margin-right: 4px; /* Space between toggle and text */
+	font-size: 0.5em; /* Adjust for desired icon size */
+	line-height: 1;
+	min-width: 16px; /* Ensure it's easily clickable */
+	text-align: center;
+	flex-shrink: 0; /* Prevent shrinking */
+}
+
+.toc-toggle-button:hover {
+	opacity: 0.8;
+	transform: scale(1.2);
+}
+
+.toc-toggle-placeholder {
+	display: inline-block;
+	min-width: 16px; /* Match button width for alignment */
+	margin-right: 4px; /* Match button margin */
+	flex-shrink: 0;
 }
 
 .toc-item-link,
 .toc-item-header {
-	font-family: "SFProCompact Nerd Font", "Symbols Nerd Font", sans-serif;
-	font-weight: 400;
-	display: block;
-	padding: 8px 10px 8px 15px;
-	/* Default padding, left padding adjusted by style prop */
 	text-decoration: none !important;
-	color: #ddd8e6bb;
-	font-size: 0.85em;
+	/* color: #bdc3c7; */ /* Default link/header color */
+	display: block;
+	padding: 3px 5px 3px 0; /* Padding for the text area */
+	border-radius: 3px;
+	flex-grow: 1; /* Allow text to take remaining space */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	border-left: 3px solid transparent;
-	/* For active indicator */
-	transition:
-		background-color 0.3s ease,
-		color 0.3s ease,
-		border-left-color 0.3s ease;
+	line-height: 1.4;
 }
 
 .toc-item-link:hover {
-	background-color: #33333720;
-	color: #cf5b38;
-	border-left-color: #61dafb50;
+	text-decoration: none;
+	/* color: #ffffff; */
+	background-color: rgba(255, 255, 255, 0.08);
 }
 
 .toc-item-link.active {
-	background-color: #005ea515;
-	/* Subtle active background */
-	color: #61dafbbb;
-	/* Brighter active text color */
-	font-weight: 600;
-	border-left-color: #61dafb80;
-	/* Active indicator line */
-	border-left-width: 5px;
+	text-decoration: none;
+	font-weight: bold;
+	/* color: #3498db; */ /* Active link color */
+	background-color: rgba(52, 152, 219, 0.15);
 }
 
 .toc-item-header {
-	color: #a0a0a050;
-	/* Dimmer color for non-linkable headers */
-	font-weight: bold;
+	/* color: #95a5a6; */
 	cursor: var(--crosshair);
-	padding-top: 10px;
-	padding-bottom: 5px;
-	/* margin-top: 5px; */
+}
+
+.toc-item-header[style*="cursor: var(--crosshair)"] {
+	/* If header is made clickable for toggling */
+	cursor: pointer;
+}
+.toc-item-header[style*="cursor: crosshair"]:hover {
+	background-color: rgba(255, 255, 255, 0.05); /* Subtle hover for toggleable headers */
+}
+
+/* Nested lists do not need extra padding-left here,
+   as indentation is handled by 'paddingLeft' on 'toc-item-row' */
+.toc-container ul ul {
+	/* No specific padding needed here if item rows handle it */
 }
