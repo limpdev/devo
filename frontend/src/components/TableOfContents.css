@@ -4,8 +4,13 @@ nav {
 	cursor: var(--crosshair);
 }
 
+.toc-item-row > a {
+	padding: 0.33em;
+	text-rendering: optimizeLegibility !important;
+}
+
 .toc-container {
-	padding: 10px;
+	/* padding: 10px; */
 	background-color: transparent;
 	color: #ecf0f1;
 	overflow-y: auto;
@@ -28,7 +33,24 @@ nav {
 	display: flex;
 	align-items: center;
 	/* padding-left is now applied via inline style for dynamic indentation */
-	min-height: 24px; /* Ensure consistent row height */
+	min-height: 20px; /* Ensure consistent row height */
+	width: 200px;
+}
+
+.toc-item-row::before {
+	scale: 1;
+	transition: all 350ms ease;
+}
+
+.toc-item-row:hover {
+	transform: scaleX(0.99) translateX(-5px);
+	transition: all 350ms ease;
+	box-shadow: 6px #05050520;
+}
+
+.toc-item-row:active {
+	transform: scaleY(0.8);
+	transition: all 100ms ease-in-out;
 }
 
 .toc-toggle-button {
@@ -36,7 +58,7 @@ nav {
 	border: none;
 	color: inherit; /* Or a specific color for the toggle */
 	cursor: var(--crosshair);
-	padding: 0 4px 0 0; /* Adjust as needed */
+	padding: 0 2px 0 0; /* Adjust as needed */
 	margin-right: 4px; /* Space between toggle and text */
 	font-size: 0.5em; /* Adjust for desired icon size */
 	line-height: 1;
@@ -62,8 +84,8 @@ nav {
 	text-decoration: none !important;
 	/* color: #bdc3c7; */ /* Default link/header color */
 	display: block;
-	padding: 3px 5px 3px 0; /* Padding for the text area */
-	border-radius: 3px;
+	padding: 3px 3px 3px 0; /* Padding for the text area */
+	border-radius: 7px;
 	flex-grow: 1; /* Allow text to take remaining space */
 	white-space: nowrap;
 	overflow: hidden;
@@ -91,7 +113,7 @@ nav {
 
 .toc-item-header[style*="cursor: var(--crosshair)"] {
 	/* If header is made clickable for toggling */
-	cursor: pointer;
+	cursor: var(--crosshair);
 }
 .toc-item-header[style*="cursor: crosshair"]:hover {
 	background-color: rgba(255, 255, 255, 0.05); /* Subtle hover for toggleable headers */
@@ -101,4 +123,56 @@ nav {
    as indentation is handled by 'paddingLeft' on 'toc-item-row' */
 .toc-container ul ul {
 	/* No specific padding needed here if item rows handle it */
+}
+
+a.toc-item-link {
+	cursor: var(--crosshair);
+}
+
+.toc-toggle-button {
+	transform: rotate(-90deg);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 250ms ease;
+	align-self: anchor-center;
+	width: 16px;
+	height: 16px;
+	border-radius: 25%;
+}
+
+.toc-toggle-button[aria-expanded="false"][title="Expand"] {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 450ms ease;
+	align-self: anchor-center;
+	border-radius: 25%;
+}
+
+.toc-toggle-button[aria-expanded="true"][title="Collapse"] {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 450ms ease;
+	align-self: anchor-center;
+	transform: rotate(-45deg);
+	border-radius: 25%;
+	background-color: #3d3d3daa;
+}
+
+.content-view-wrapper {
+	transition: opacity 250ms ease-in-out;
+	opacity: 1; /* Default visible */
+}
+.content-view-wrapper.content-fading-out {
+	transition: opacity 250ms ease-in-out;
+	opacity: 0;
+}
+.content-view-wrapper.content-faded-in {
+	transition: opacity 250ms ease-in-out;
+	/* Can be the default state if not fading out or loading */
+	opacity: 1;
+}
+/* Ensure loading indicator is visible and content is hidden during load */
+.content-loading {
+	display: none;
+	/* Styles for your loading indicator */
 }

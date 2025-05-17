@@ -1,5 +1,5 @@
 :root {
-	--bgTransparent: rgba(0, 0, 0, 0.0);
+	--bgTransparent: rgba(0, 0, 0, 0);
 }
 
 #app {
@@ -9,25 +9,25 @@
 
 /* In App.css or similar */
 .content-area {
-  transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 }
 .content-area.fading-out {
-  opacity: 0;
+	opacity: 0;
 }
 .content-area.fading-in {
-  opacity: 1;
+	opacity: 1;
 }
 
 /* Add to your App.css or index.css or style.css */
 @keyframes ripple-radius {
-  to {
-    r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
-  }
+	to {
+		r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
+	}
 }
 @keyframes ripple-opacity {
-  to {
-    opacity: 0;
-  }
+	to {
+		opacity: 0;
+	}
 }
 
 html,
@@ -98,14 +98,14 @@ body,
 /* -------------------------- CODEBLOCK STYLING BELOW ---------------------------- */
 /* ------------------------------------------------------------------------------- */
 /* <div class="code-wrapper"><button class="clip-button" aria-label="Copy to clipboard" title="Copy to clipboard"> */
-		/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" */
-			/* aria-hidden="true"> */
-			/* <path */
-				/* d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"> */
-			/* </path> */
-		/* </svg> */
-	/* </button><span class="language-label">no</span> */
-	/* <pre><code class="hljs language-no-highlight"> CONTENT WILL GO HERE </code></pre> */
+/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" */
+/* aria-hidden="true"> */
+/* <path */
+/* d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"> */
+/* </path> */
+/* </svg> */
+/* </button><span class="language-label">no</span> */
+/* <pre><code class="hljs language-no-highlight"> CONTENT WILL GO HERE </code></pre> */
 /* </div> */
 
 .code-wrapper {
@@ -165,7 +165,7 @@ button.clip-button:active svg {
 	align-items: center;
 	padding: 10px 0;
 	top: 65px;
-    left: 7px;
+	left: 7px;
 }
 
 .openFolderButton {
@@ -191,4 +191,84 @@ button.clip-button:active svg {
 	transition: all 300ms ease-in-out;
 	padding: 1px;
 	padding-left: 5px;
+}
+
+/* --------------------------------------------------------------------- */
+/* -------------------------- CUSTOM DETAILS TAGS ---------------------- */
+/* --------------------------------------------------------------------- */
+details {
+	border-radius: 13px;
+	margin-bottom: 16px;
+}
+
+/* Remove default triangle marker */
+details summary {
+	font-size: 0.9em;
+	font-family: "SF Compact Rounded", "SF Pro Text", "Symbols Nerd Font";
+	padding: 1em 2em;
+	margin-bottom: 1em;
+	cursor: var(--crosshair);
+	border-radius: 13px;
+	user-select: none;
+	list-style: none;
+	position: relative;
+	box-shadow: 5px 5px 5px 5px #00000015;
+	font-weight: 500;
+	color: #aaa;
+	background: #000003;
+	transition:
+		background 400ms ease,
+		color 400ms ease,
+		transform 200ms ease;
+}
+
+details summary:hover {
+	background: #040404ff;
+	transform: scale(1, 0.9);
+	box-shadow: 5px 5px 5px 5px #00000015;
+}
+
+details summary:active {
+	transform: scale(1, 0.8);
+	box-shadow: 5px 5px 5px 5px #00000015;
+}
+
+/* Remove default triangle in Safari */
+details summary::-webkit-details-marker {
+	display: none;
+}
+
+/* Create custom icon */
+details summary::before {
+	content: "";
+	position: absolute;
+	right: 16px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 0.25s ease;
+}
+
+details[open] summary::before {
+	transform: translateY(-50%) rotate(180deg);
+}
+
+.details-content {
+	padding: 0 16px;
+	overflow: hidden;
+	will-change: height;
+	transition: height 0.4s ease;
+}
+
+/* Different icon styles - uncomment to try them */
+.plus-minus summary::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'%3E%3C/line%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+}
+
+.plus-minus[open] summary::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+	transform: translateY(-50%);
 }

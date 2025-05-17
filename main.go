@@ -14,16 +14,16 @@ import (
 )
 
 //go:embed all:frontend/dist
-var assets embed.FS // Embeds the React frontend (HTML, CSS, JS, etc.) into the binary.
+var assets embed.FS
+
+// bookSrcPath should ideally be configurable or determined dynamically,
+// but for consistency with app.go, we define it here.
+// Ensure this matches the one in app.go if GetMarkdownContent's baseDir is related.
+const bookResourcePath = "./book/LimpBook/" // Path to your markdown book's root (where images, etc., are relative to)
 
 func main() {
-	// Create an instance of the app structure
 	app := NewApp()
-	const bookSrcPath = "./book/LimpBook/" // Same as in app.go
 
-	// assets := "frontend/dist" 		      // If used, the path can't be used
-
-	// Create application with options
 	err := wails.Run(&options.App{
 		Title:                    "devo",
 		Width:                    1024,
@@ -42,40 +42,35 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 16, G: 16, B: 16, A: 1},
 		Windows: &windows.Options{
-			WebviewIsTransparent: true,  // Allows underlying window/desktop to show if HTML is *also* transparent
-			WindowIsTranslucent:  false, // Usually false unless you want the whole window semi-transparent
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  false,
 			DisablePinchZoom:     true,
 		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
 				TitlebarAppearsTransparent: true,
-				//HideTitle:                  false,
-				//HideTitleBar:               false,
-				//FullSizeContent:            false,
-				//UseToolbar:                 false,
-				//HideToolbarSeparator:       true,
 			},
-			//Appearance:           mac.NSAppearanceNameDarkAqua,
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
 				Title: "devo",
 			},
 		},
-		// main.go (AssetServer part)
 		AssetServer: &assetserver.Options{
-			Assets: assets, // Serves the React frontend
+			Assets: assets, // Serves the React frontend from embed.FS
 			Middleware: func(next http.Handler) http.Handler {
 				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 					path := r.URL.Path
-					// Serve assets for markdown (e.g. images) from ./book/LimpBook/
-					if strings.HasPrefix(path, "frontend/dist") {
-						// log.Printf("Serving book asset: %s", path) // For debugging
-						http.StripPrefix("frontend/dist", http.FileServer(http.Dir(bookSrcPath))).ServeHTTP(w, r)
+					// Serve static assets (e.g., images) for markdown content
+					// from the book's source directory.
+					if strings.HasPrefix(path, "/bookassets/") {
+						// log.Printf("Serving book asset: %s from %s", path, bookResourcePath) // For debugging
+						// Strip /bookassets/ and serve from bookResourcePath
+						http.StripPrefix("/bookassets/", http.FileServer(http.Dir(bookResourcePath))).ServeHTTP(w, r)
 						return
 					}
-					log.Printf("Serving frontend asset: %s", path) // For debugging
-					next.ServeHTTP(w, r)                           // Let Wails serve the React app
+					// log.Printf("Serving frontend asset: %s", path) // For debugging
+					next.ServeHTTP(w, r) // Let Wails serve the React app's assets
 				})
 			},
 		},

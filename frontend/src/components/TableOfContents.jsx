@@ -37,7 +37,7 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 			<div className="toc-item-row" style={itemRowStyle}>
 				{hasChildren ? (
 					<button onClick={handleToggleCollapse} className="toc-toggle-button" aria-expanded={!isCollapsed} title={isCollapsed ? "Expand" : "Collapse"}>
-						{isCollapsed ? "●" : "○"}
+						{isCollapsed ? "" : ""}
 					</button>
 				) : (
 					<span className="toc-toggle-placeholder"></span> /* For alignment */
