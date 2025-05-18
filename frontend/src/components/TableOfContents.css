@@ -2,38 +2,68 @@
 
 nav {
 	cursor: var(--crosshair);
+	background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%);
 }
 
-.toc-item-row > a {
+.toc-item-row>a {
+	font-size: 0.9em;
 	padding: 0.33em;
 	text-rendering: optimizeLegibility !important;
 }
 
 .toc-container {
-	/* padding: 10px; */
-	background-color: transparent;
-	color: #ecf0f1;
-	overflow-y: auto;
-	text-decoration: none;
-	height: 80vh;
-	align-self: center;
+  /* Keep your existing styles */
+  background-color: transparent;
+  color: #ecf0f1;
+  overflow-y: auto;
+  text-decoration: none;
+  height: 85vh;
+  align-self: center;
+  min-width: 215px;
+  background: #161616;
+  
+  /* Add these properties for the fade effect */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  
+  /* Add some padding to make room for the fade effect */
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .toc-container ul {
+	background: #161616;
 	list-style-type: none;
-	padding-left: 0; /* Base ul has no padding, indentation is per item */
+	padding-left: 0;
+	/* Base ul has no padding, indentation is per item */
 	margin: 0;
+	padding-top: 2.5em;
+	padding-bottom: 2.5em;
 }
 
 .toc-container li {
-	margin-bottom: 2px; /* Optional: small space between list items */
+	margin-bottom: 2px;
+	/* Optional: small space between list items */
 }
 
 .toc-item-row {
 	display: flex;
 	align-items: center;
 	/* padding-left is now applied via inline style for dynamic indentation */
-	min-height: 20px; /* Ensure consistent row height */
+	min-height: 20px;
+	/* Ensure consistent row height */
 	width: 200px;
 }
 
@@ -56,15 +86,21 @@ nav {
 .toc-toggle-button {
 	background: none;
 	border: none;
-	color: inherit; /* Or a specific color for the toggle */
+	color: inherit;
+	/* Or a specific color for the toggle */
 	cursor: var(--crosshair);
-	padding: 0 2px 0 0; /* Adjust as needed */
-	margin-right: 4px; /* Space between toggle and text */
-	font-size: 0.5em; /* Adjust for desired icon size */
+	padding: 0 2px 0 0;
+	/* Adjust as needed */
+	margin-right: 4px;
+	/* Space between toggle and text */
+	font-size: 0.5em;
+	/* Adjust for desired icon size */
 	line-height: 1;
-	min-width: 16px; /* Ensure it's easily clickable */
+	min-width: 16px;
+	/* Ensure it's easily clickable */
 	text-align: center;
-	flex-shrink: 0; /* Prevent shrinking */
+	flex-shrink: 0;
+	/* Prevent shrinking */
 }
 
 .toc-toggle-button:hover {
@@ -74,19 +110,24 @@ nav {
 
 .toc-toggle-placeholder {
 	display: inline-block;
-	min-width: 16px; /* Match button width for alignment */
-	margin-right: 4px; /* Match button margin */
+	min-width: 16px;
+	/* Match button width for alignment */
+	margin-right: 4px;
+	/* Match button margin */
 	flex-shrink: 0;
 }
 
 .toc-item-link,
 .toc-item-header {
 	text-decoration: none !important;
-	/* color: #bdc3c7; */ /* Default link/header color */
+	/* color: #bdc3c7; */
+	/* Default link/header color */
 	display: block;
-	padding: 3px 3px 3px 0; /* Padding for the text area */
+	padding: 3px 3px 3px 0;
+	/* Padding for the text area */
 	border-radius: 7px;
-	flex-grow: 1; /* Allow text to take remaining space */
+	flex-grow: 1;
+	/* Allow text to take remaining space */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -102,7 +143,8 @@ nav {
 .toc-item-link.active {
 	text-decoration: none;
 	font-weight: bold;
-	/* color: #3498db; */ /* Active link color */
+	/* color: #3498db; */
+	/* Active link color */
 	background-color: rgba(52, 152, 219, 0.15);
 }
 
@@ -115,8 +157,10 @@ nav {
 	/* If header is made clickable for toggling */
 	cursor: var(--crosshair);
 }
+
 .toc-item-header[style*="cursor: crosshair"]:hover {
-	background-color: rgba(255, 255, 255, 0.05); /* Subtle hover for toggleable headers */
+	background-color: rgba(255, 255, 255, 0.05);
+	/* Subtle hover for toggleable headers */
 }
 
 /* Nested lists do not need extra padding-left here,
@@ -160,17 +204,21 @@ a.toc-item-link {
 
 .content-view-wrapper {
 	transition: opacity 250ms ease-in-out;
-	opacity: 1; /* Default visible */
+	opacity: 1;
+	/* Default visible */
 }
+
 .content-view-wrapper.content-fading-out {
 	transition: opacity 250ms ease-in-out;
 	opacity: 0;
 }
+
 .content-view-wrapper.content-faded-in {
 	transition: opacity 250ms ease-in-out;
 	/* Can be the default state if not fading out or loading */
 	opacity: 1;
 }
+
 /* Ensure loading indicator is visible and content is hidden during load */
 .content-loading {
 	display: none;

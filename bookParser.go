@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	// "path"
 	"regexp"
 	"strings"
 )
@@ -28,6 +30,7 @@ type BookData struct {
 // ... (App struct, NewApp, startup, shutdown, Greet, GetMarkdownContent from previous steps)
 
 const bookSrcPath = "./book/LimpBook/" // Define base path for book source
+// var summaryFilePath = path.Join(bookSrcPath, "SUMMARY.md")
 
 // parseSummaryMD parses the SUMMARY.md file and returns a slice of TOCItem and the first chapter path.
 func (a *App) parseSummaryMD(summaryFilePath string) ([]TOCItem, string, error) {

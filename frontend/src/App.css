@@ -133,26 +133,33 @@ body,
 	background: #09090a;
 	border: #09090a;
 	opacity: 0.3;
-	transition: all 600ms ease-in-out;
+	transition: all 350ms ease-in-out;
 }
 
 .clip-button:hover svg {
 	opacity: 1;
 	fill: #f5d49e;
 	stroke: #f5d49e;
-	transform: scale(1.2);
+	transform: scale(1.15);
+	transition: all 350ms ease-in-out;
 }
 
 button.clip-button:before svg {
+	transform: scale(1);
 	opacity: 1;
+	transition: all 150ms ease-in-out;
 }
 
 button.clip-button:after svg {
 	opacity: 1;
+	transform: scale(0.8, 1);
+	transition: all 150ms ease-in-out;
 }
 
 button.clip-button:active svg {
 	opacity: 1;
+	transform: scale(0.9, 1);
+	transition: all 90ms ease-in-out;
 }
 
 .toc-footer {
@@ -164,7 +171,7 @@ button.clip-button:active svg {
 	justify-content: center;
 	align-items: center;
 	padding: 10px 0;
-	top: 65px;
+	bottom: 0px;
 	left: 7px;
 }
 
@@ -177,12 +184,20 @@ button.clip-button:active svg {
 	margin-left: 45px; */
 	background: transparent;
 	opacity: 0.3;
-	transition: all 500ms ease-in-out;
+	transition: all 250ms ease-in-out;
 }
 
 .openFolderButton:hover {
+	opacity: 0.8;
+	background-color: #303030;
+	transform: scale(0.9, 1);
+}
+
+.openFolderButton:active {
 	opacity: 1;
 	background-color: #303030;
+	transform: scale(0.8, 1);
+	transition: all 100ms ease-in-out;
 }
 
 .openFolderButton > svg {
