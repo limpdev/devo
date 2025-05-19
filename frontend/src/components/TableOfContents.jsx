@@ -34,7 +34,7 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 
 	return (
 		<li>
-			<div className="toc-item-row" style={itemRowStyle}>
+			<div className="toc-item-row hide-scrollbar scrollbar-none" style={itemRowStyle}>
 				{hasChildren ? (
 					<button onClick={handleToggleCollapse} className="toc-toggle-button" aria-expanded={!isCollapsed} title={isCollapsed ? "Expand" : "Collapse"}>
 						{isCollapsed ? "" : ""}
@@ -58,7 +58,7 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 					</a>
 				) : (
 					<span
-						className="toc-item-header"
+						className="toc-item-header hide-scrollbar scrollbar-none"
 						// If non-clickable headers can also be parents, allow toggling them
 						onClick={hasChildren ? handleToggleCollapse : undefined}
 						style={{ cursor: hasChildren ? "pointer" : "default", fontWeight: item.level === 0 ? "bold" : "normal" }}

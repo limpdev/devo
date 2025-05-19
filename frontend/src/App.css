@@ -1,46 +1,42 @@
 :root {
-    --bgTransparent: rgba(0, 0, 0, 0);
+	--bgTransparent: rgba(0, 0, 0, 0);
 }
 
 #app {
-<<<<<<< HEAD
 	height: 100vh;
 	text-align: center;
 	filter: blur(10px);
-=======
-    height: 100vh;
-    text-align: center;
-    border-radius: 7px;
->>>>>>> 6ccac87298dac716f8a190f36fb7e2f17a89c48c
+	height: 100vh;
+	text-align: center;
+	border-radius: 7px;
 }
 
 /* In App.css or similar */
 .content-area {
-    transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 }
 .content-area.fading-out {
-    opacity: 0;
+	opacity: 0;
 }
 .content-area.fading-in {
-    opacity: 1;
+	opacity: 1;
 }
 
 /* Add to your App.css or index.css or style.css */
 @keyframes ripple-radius {
-    to {
-        r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
-    }
+	to {
+		r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
+	}
 }
 @keyframes ripple-opacity {
-    to {
-        opacity: 0;
-    }
+	to {
+		opacity: 0;
+	}
 }
 
 html,
 body,
 #root {
-<<<<<<< HEAD
 	/* Ensure #root also takes full height */
 	height: 100vh;
 	margin: 0;
@@ -68,69 +64,67 @@ body,
 		"Open Sans",
 		"Helvetica Neue",
 		sans-serif;
-=======
-    /* Ensure #root also takes full height */
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    background: var(--bgColor-default);
-    border-radius: 7px;
-    /* Prevent body scrollbars if children manage their own */
+	/* Ensure #root also takes full height */
+	height: 100vh;
+	margin: 0;
+	overflow: hidden;
+	/* background: var(--bgColor-default); */
+	border-radius: 7px;
+	/* Prevent body scrollbars if children manage their own */
 }
 
 #app-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: var(--bgColor-default);
-    color: #ccc;
-    border-radius: 7px;
-    font-family:
-        "Jost",
-        "Symbols Nerd Font",
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        "Open Sans",
-        "Helvetica Neue",
-        sans-serif;
->>>>>>> 6ccac87298dac716f8a190f36fb7e2f17a89c48c
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	/* background: var(--bgColor-default); */
+	color: #ccc;
+	border-radius: 7px;
+	font-family:
+		"Jost",
+		"Symbols Nerd Font",
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		"Open Sans",
+		"Helvetica Neue",
+		sans-serif;
 }
 
 .main-layout {
-    display: flex;
-    flex-grow: 1;
-    /* Takes remaining height after title bar */
-    height: calc(100% - 40px);
-    /* Adjust 30px if title bar height changes */
-    /* overflow: hidden; */
-    /* Children will manage their own scroll */
+	display: flex;
+	flex-grow: 1;
+	/* Takes remaining height after title bar */
+	height: calc(100% - 40px);
+	/* Adjust 30px if title bar height changes */
+	/* overflow: hidden; */
+	/* Children will manage their own scroll */
 }
 
 /* TableOfContents component will have its own width and scroll */
 
 .content-view-wrapper {
-    flex-grow: 1;
-    overflow-y: auto;
-    /* This is where the content scrolls */
-    padding: 25px 30px;
-    /* Ample padding around content */
-    /* background-color: #1e1e1e; */
-    /* Main content background */
-    box-sizing: border-box;
+	flex-grow: 1;
+	overflow-y: auto;
+	/* This is where the content scrolls */
+	padding: 25px 30px;
+	/* Ample padding around content */
+	/* background-color: #1e1e1e; */
+	/* Main content background */
+	box-sizing: border-box;
 }
 
 .hide-scrollbar {
-    scrollbar-width: none !important; /* Firefox */
-    -ms-overflow-style: none !important; /* IE and Edge */
+	scrollbar-width: none !important; /* Firefox */
+	-ms-overflow-style: none !important; /* IE and Edge */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-    display: none !important; /* Chrome, Safari, Opera */
+	display: none !important; /* Chrome, Safari, Opera */
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -148,116 +142,115 @@ body,
 /* </div> */
 
 .code-wrapper {
-    position: relative;
-    /* For absolute positioning of the button */
-    margin-bottom: 1em;
-    /* Space between code blocks */
+	position: relative;
+	/* For absolute positioning of the button */
+	margin-bottom: 1em;
+	/* Space between code blocks */
 }
 
 .clip-button svg {
-    width: 19px;
-    height: 19px;
-    fill: #09090a;
-    stroke: #fff;
-    opacity: 0.3;
-    transition: all 600ms ease-in-out;
+	width: 19px;
+	height: 19px;
+	fill: #09090a;
+	stroke: #fff;
+	opacity: 0.3;
+	transition: all 600ms ease-in-out;
 }
 
 .clip-button {
-    z-index: 100;
-    cursor: var(--crosshair);
-    position: absolute;
-    top: 1em;
-    right: 2.5em;
-    background: #09090a;
-    border: #09090a;
-    opacity: 0.3;
-    transition: all 350ms ease-in-out;
+	z-index: 100;
+	cursor: var(--crosshair);
+	position: absolute;
+	top: 1em;
+	right: 2.5em;
+	background: #09090a;
+	border: #09090a;
+	opacity: 0.3;
+	transition: all 350ms ease-in-out;
 }
 
 .clip-button:hover svg {
-    opacity: 1;
-    fill: #f5d49e;
-    stroke: #f5d49e;
-    transform: scale(1.15);
-    transition: all 350ms ease-in-out;
+	opacity: 1;
+	fill: #f5d49e;
+	stroke: #f5d49e;
+	transform: scale(1.15);
+	transition: all 350ms ease-in-out;
 }
 
 button.clip-button:before svg {
-    transform: scale(1);
-    opacity: 1;
-    transition: all 150ms ease-in-out;
+	transform: scale(1);
+	opacity: 1;
+	transition: all 150ms ease-in-out;
 }
 
 button.clip-button:after svg {
-    opacity: 1;
-    transform: scale(0.8, 1);
-    transition: all 150ms ease-in-out;
+	opacity: 1;
+	transform: scale(0.8, 1);
+	transition: all 150ms ease-in-out;
 }
 
 button.clip-button:active svg {
-    opacity: 1;
-    transform: scale(0.9, 1);
-    transition: all 90ms ease-in-out;
+	opacity: 1;
+	transform: scale(0.9, 1);
+	transition: all 90ms ease-in-out;
 }
 
 .toc-footer {
-    font-family: "Jost", "Symbols Nerd Font", sans-serif;
-    font-size: 10px;
-    z-index: 10;
-    display: flex;
-    position: fixed;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-    bottom: 0px;
-    left: 7px;
+	font-family: "Jost", "Symbols Nerd Font", sans-serif;
+	font-size: 10px;
+	z-index: 10;
+	display: flex;
+	position: fixed;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0;
+	bottom: 0px;
+	left: 7px;
 }
 
 .openFolderButton {
-    display: flow;
-    border: 1px solid #ce966220;
-    align-items: anchor-center;
-    border-radius: 7px;
-    /* margin-top: 25px;
+	display: flow;
+	border: 1px solid #ce966220;
+	align-items: anchor-center;
+	border-radius: 7px;
+	/* margin-top: 25px;
 	margin-left: 45px; */
-    background: transparent;
-    opacity: 0.3;
-    transition: all 250ms ease-in-out;
+	background: transparent;
+	opacity: 0.3;
+	transition: all 250ms ease-in-out;
 }
 
 .openFolderButton:hover {
-    opacity: 0.8;
-    background-color: #303030;
-    transform: scale(0.9, 1);
+	opacity: 0.8;
+	background-color: #303030;
+	transform: scale(0.9, 1);
 }
 
 .openFolderButton:active {
-    opacity: 1;
-    background-color: #303030;
-    transform: scale(0.8, 1);
-    transition: all 100ms ease-in-out;
+	opacity: 1;
+	background-color: #303030;
+	transform: scale(0.8, 1);
+	transition: all 100ms ease-in-out;
 }
 
 .openFolderButton > svg {
-    width: 17px;
-    stroke: #ce9662aa;
-    transition: all 300ms ease-in-out;
-    padding: 1px;
-    padding-left: 5px;
+	width: 17px;
+	stroke: #ce9662aa;
+	transition: all 300ms ease-in-out;
+	padding: 1px;
+	padding-left: 5px;
 }
 
 /* --------------------------------------------------------------------- */
 /* -------------------------- CUSTOM DETAILS TAGS ---------------------- */
 /* --------------------------------------------------------------------- */
 details {
-    border-radius: 13px;
-    margin-bottom: 16px;
+	border-radius: 13px;
+	margin-bottom: 16px;
 }
 
 /* Remove default triangle marker */
 details summary {
-<<<<<<< HEAD
 	font-size: 0.9em;
 	font-family: "SF Compact Rounded", "SF Pro Text", "Symbols Nerd Font";
 	padding: 1em 2em;
@@ -281,74 +274,72 @@ details summary:hover {
 	background: #000003dd;
 	transform: scale(1, 0.9);
 	box-shadow: 5px 5px 5px 5px #00000015;
-=======
-    font-size: 0.9em;
-    font-family: "SF Compact Rounded", "SF Pro Text", "Symbols Nerd Font";
-    padding: 1em 2em;
-    margin-bottom: 1em;
-    cursor: var(--crosshair);
-    border-radius: 13px;
-    user-select: none;
-    list-style: none;
-    position: relative;
-    box-shadow: 5px 5px 5px 5px #00000015;
-    font-weight: 500;
-    color: #aaa;
-    background: #000003;
-    transition:
-        background 400ms ease,
-        color 400ms ease,
-        transform 200ms ease;
+	font-size: 0.9em;
+	font-family: "SF Compact Rounded", "SF Pro Text", "Symbols Nerd Font";
+	padding: 1em 2em;
+	margin-bottom: 1em;
+	cursor: var(--crosshair);
+	border-radius: 13px;
+	user-select: none;
+	list-style: none;
+	position: relative;
+	box-shadow: 5px 5px 5px 5px #00000015;
+	font-weight: 500;
+	color: #aaa;
+	background: #000003;
+	transition:
+		background 400ms ease,
+		color 400ms ease,
+		transform 200ms ease;
 }
 
 details summary:hover {
-    background: #040404ff;
-    transform: scale(1, 0.9);
-    box-shadow: 5px 5px 5px 5px #00000015;
->>>>>>> 6ccac87298dac716f8a190f36fb7e2f17a89c48c
+	background: #040404ff;
+	transform: scale(1, 0.9);
+	box-shadow: 5px 5px 5px 5px #00000015;
 }
 
 details summary:active {
-    transform: scale(1, 0.8);
-    box-shadow: 5px 5px 5px 5px #00000015;
+	transform: scale(1, 0.8);
+	box-shadow: 5px 5px 5px 5px #00000015;
 }
 
 /* Remove default triangle in Safari */
 details summary::-webkit-details-marker {
-    display: none;
+	display: none;
 }
 
 /* Create custom icon */
 details summary::before {
-    content: "";
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-size: contain;
-    transition: transform 0.25s ease;
+	content: "";
+	position: absolute;
+	right: 16px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 0.25s ease;
 }
 
 details[open] summary::before {
-    transform: translateY(-50%) rotate(180deg);
+	transform: translateY(-50%) rotate(180deg);
 }
 
 .details-content {
-    padding: 0 16px;
-    overflow: hidden;
-    will-change: height;
-    transition: height 0.4s ease;
+	padding: 0 16px;
+	overflow: hidden;
+	will-change: height;
+	transition: height 0.4s ease;
 }
 
 /* Different icon styles - uncomment to try them */
 .plus-minus summary::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'%3E%3C/line%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'%3E%3C/line%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
 }
 
 .plus-minus[open] summary::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
-    transform: translateY(-50%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+	transform: translateY(-50%);
 }

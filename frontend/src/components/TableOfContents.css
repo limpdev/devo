@@ -1,262 +1,245 @@
 /* frontend/src/components/TableOfContents.css */
 
+.hide-scrollbar {
+	scrollbar-width: none !important; /* Firefox */
+	-ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none !important; /* Chrome, Safari, Opera */
+}
+
 nav {
-<<<<<<< HEAD
 	cursor: var(--crosshair);
 	/* background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%); */
-=======
-    cursor: var(--crosshair);
-    border-radius: 7px;
-    background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%);
->>>>>>> 6ccac87298dac716f8a190f36fb7e2f17a89c48c
+	cursor: var(--crosshair);
+	border-radius: 7px;
+	background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%);
+	overflow: hidden;
 }
 
 .toc-item-row > a {
-    font-size: 0.9em;
-    padding: 0.33em;
-    text-rendering: optimizeLegibility !important;
+	font-size: 0.9em;
+	padding: 0.33em;
+	text-rendering: optimizeLegibility !important;
 }
 
 .toc-container {
-<<<<<<< HEAD
-  /* Keep your existing styles */
-  background-color: transparent;
-  color: #ecf0f1;
-  overflow-y: auto;
-  text-decoration: none;
-  height: 85vh;
-  align-self: center;
-  min-width: 215px;
-  /* background: #161616; Disabled for consistent transparency */
-  
-  /* Add these properties for the fade effect */
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-  
-  /* Add some padding to make room for the fade effect */
-  padding-top: 20px;
-  padding-bottom: 20px;
+	/* Keep your existing styles */
+	color: #ecf0f1;
+	overflow: hidden;
+	text-decoration: none;
+	height: 85vh;
+	align-self: center;
+	min-width: 215px;
+	/* background: #161616; Disabled for consistent transparency */
+	/* Add these properties for the fade effect */
+	mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+	/* Add some padding to make room for the fade effect */
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .toc-container ul {
-	background: linear-gradient(to left #16161650, to right #16161680);
+	/* background: linear-gradient(to left #16161650, to right #16161680); */
 	list-style-type: none;
 	padding-left: 0;
 	/* Base ul has no padding, indentation is per item */
 	margin: 0;
 	padding-top: 2.5em;
 	padding-bottom: 2.5em;
-=======
-    /* Keep your existing styles */
-    background-color: transparent;
-    color: #ecf0f1;
-    overflow-y: auto;
-    text-decoration: none;
-    height: 85vh;
-    align-self: center;
-    min-width: 215px;
-    background: #161616;
-
-    /* Add these properties for the fade effect */
-    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-
-    /* Add some padding to make room for the fade effect */
-    padding-top: 20px;
-    padding-bottom: 20px;
+	/* Keep your existing styles */
+	color: #ecf0f1;
+	overflow: auto;
+	text-decoration: none;
+	height: 85vh;
+	align-self: center;
+	min-width: 215px;
+	/* background: #161616; */
+	/* Add these properties for the fade effect */
+	mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+	/* Add some padding to make room for the fade effect */
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .toc-container ul {
-    background: #161616;
-    list-style-type: none;
-    padding-left: 0;
-    /* Base ul has no padding, indentation is per item */
-    margin: 0;
-    padding-top: 2.5em;
-    padding-bottom: 2.5em;
->>>>>>> 6ccac87298dac716f8a190f36fb7e2f17a89c48c
+	/* background: #161616; */
+	list-style-type: none;
+	padding-left: 0;
+	/* Base ul has no padding, indentation is per item */
+	margin: 0;
+	padding-top: 2.5em;
+	padding-bottom: 2.5em;
 }
 
 .toc-container li {
-    margin-bottom: 2px;
-    /* Optional: small space between list items */
+	margin-bottom: 2px;
+	/* Optional: small space between list items */
 }
 
 .toc-item-row {
-    display: flex;
-    align-items: center;
-    /* padding-left is now applied via inline style for dynamic indentation */
-    min-height: 20px;
-    /* Ensure consistent row height */
-    width: 200px;
+	display: flex;
+	align-items: center;
+	/* padding-left is now applied via inline style for dynamic indentation */
+	min-height: 20px;
+	/* Ensure consistent row height */
+	width: 200px;
 }
 
 .toc-item-row::before {
-    scale: 1;
-    transition: all 350ms ease;
+	scale: 1;
+	transition: all 350ms ease;
 }
 
 .toc-item-row:hover {
-    transform: scaleX(0.99) translateX(-5px);
-    transition: all 350ms ease;
-    box-shadow: 6px #05050520;
+	transform: scaleX(0.99) translateX(-5px);
+	transition: all 350ms ease;
+	box-shadow: 6px #05050520;
 }
 
 .toc-item-row:active {
-    transform: scaleY(0.8);
-    transition: all 100ms ease-in-out;
+	transform: scaleY(0.8);
+	transition: all 100ms ease-in-out;
 }
 
 .toc-toggle-button {
-    background: none;
-    border: none;
-    color: inherit;
-    /* Or a specific color for the toggle */
-    cursor: var(--crosshair);
-    padding: 0 2px 0 0;
-    /* Adjust as needed */
-    margin-right: 4px;
-    /* Space between toggle and text */
-    font-size: 0.5em;
-    /* Adjust for desired icon size */
-    line-height: 1;
-    min-width: 16px;
-    /* Ensure it's easily clickable */
-    text-align: center;
-    flex-shrink: 0;
-    /* Prevent shrinking */
+	background: none;
+	border: none;
+	color: inherit;
+	/* Or a specific color for the toggle */
+	cursor: var(--crosshair);
+	padding: 0 2px 0 0;
+	/* Adjust as needed */
+	margin-right: 4px;
+	/* Space between toggle and text */
+	font-size: 0.5em;
+	/* Adjust for desired icon size */
+	line-height: 1;
+	min-width: 16px;
+	/* Ensure it's easily clickable */
+	text-align: center;
+	flex-shrink: 0;
+	/* Prevent shrinking */
 }
 
 .toc-toggle-button:hover {
-    opacity: 0.8;
-    transform: scale(1.2);
+	opacity: 0.8;
+	transform: scale(1.2);
 }
 
 .toc-toggle-placeholder {
-    display: inline-block;
-    min-width: 16px;
-    /* Match button width for alignment */
-    margin-right: 4px;
-    /* Match button margin */
-    flex-shrink: 0;
+	display: inline-block;
+	min-width: 16px;
+	/* Match button width for alignment */
+	margin-right: 4px;
+	/* Match button margin */
+	flex-shrink: 0;
 }
 
 .toc-item-link,
-.toc-item-header {
-    text-decoration: none !important;
-    /* color: #bdc3c7; */
-    /* Default link/header color */
-    display: block;
-    padding: 3px 3px 3px 0;
-    /* Padding for the text area */
-    border-radius: 7px;
-    flex-grow: 1;
-    /* Allow text to take remaining space */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.4;
+header {
+	text-decoration: none !important;
+	/* color: #bdc3c7; */
+	display: block;
+	padding: 3px 3px 3px 0;
+	/* Padding for the text area */
+	border-radius: 7px;
+	flex-grow: 1;
+	/* Allow text to take remaining space */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.4;
 }
 
 .toc-item-link:hover {
-    text-decoration: none;
-    /* color: #ffffff; */
-    background-color: rgba(255, 255, 255, 0.08);
+	text-decoration: none;
+	/* color: #ffffff; */
+	background-color: rgba(255, 255, 255, 0.08);
 }
 
 .toc-item-link.active {
-    text-decoration: none;
-    font-weight: bold;
-    /* color: #3498db; */
-    /* Active link color */
-    background-color: rgba(52, 152, 219, 0.15);
+	text-decoration: none;
+	font-weight: bold;
+	/* color: #3498db; */
+	/* Active link color */
+	background-color: rgba(52, 152, 219, 0.15);
 }
 
-.toc-item-header {
-    /* color: #95a5a6; */
-    cursor: var(--crosshair);
+header {
+	/* color: #95a5a6; */
+	cursor: var(--crosshair);
 }
 
-.toc-item-header[style*="cursor: var(--crosshair)"] {
-    /* If header is made clickable for toggling */
-    cursor: var(--crosshair);
+header[style*="cursor: var(--crosshair)"] {
+	cursor: var(--crosshair);
 }
 
-.toc-item-header[style*="cursor: crosshair"]:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    /* Subtle hover for toggleable headers */
+header[style*="cursor: crosshair"]:hover {
+	background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Nested lists do not need extra padding-left here,
    as indentation is handled by 'paddingLeft' on 'toc-item-row' */
 .toc-container ul ul {
-    /* No specific padding needed here if item rows handle it */
+	/* No specific padding needed here if item rows handle it */
 }
 
 a.toc-item-link {
-    cursor: var(--crosshair);
+	cursor: var(--crosshair);
 }
 
 .toc-toggle-button {
-    transform: rotate(-90deg);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-size: contain;
-    transition: transform 250ms ease;
-    align-self: anchor-center;
-    width: 16px;
-    height: 16px;
-    border-radius: 25%;
+	transform: rotate(-90deg);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 250ms ease;
+	align-self: anchor-center;
+	width: 16px;
+	height: 16px;
+	border-radius: 25%;
 }
 
 .toc-toggle-button[aria-expanded="false"][title="Expand"] {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-size: contain;
-    transition: transform 450ms ease;
-    align-self: anchor-center;
-    border-radius: 25%;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 450ms ease;
+	align-self: anchor-center;
+	border-radius: 25%;
 }
 
 .toc-toggle-button[aria-expanded="true"][title="Collapse"] {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-size: contain;
-    transition: transform 450ms ease;
-    align-self: anchor-center;
-    transform: rotate(-45deg);
-    border-radius: 25%;
-    background-color: #3d3d3daa;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-size: contain;
+	transition: transform 450ms ease;
+	align-self: anchor-center;
+	transform: rotate(-45deg);
+	border-radius: 25%;
+	/* background-color: #3d3d3daa; */
 }
 
 .content-view-wrapper {
-    transition: opacity 250ms ease-in-out;
-    opacity: 1;
-    /* Default visible */
+	transition: opacity 250ms ease-in-out;
+	opacity: 1;
+	/* Default visible */
 }
 
 .content-view-wrapper.content-fading-out {
-    transition: opacity 250ms ease-in-out;
-    opacity: 0;
+	transition: opacity 250ms ease-in-out;
+	opacity: 0;
 }
 
 .content-view-wrapper.content-faded-in {
-    transition: opacity 250ms ease-in-out;
-    /* Can be the default state if not fading out or loading */
-    opacity: 1;
+	transition: opacity 250ms ease-in-out;
+	/* Can be the default state if not fading out or loading */
+	opacity: 1;
 }
 
 /* Ensure loading indicator is visible and content is hidden during load */
 .content-loading {
-    display: none;
-    /* Styles for your loading indicator */
+	display: none;
+	/* Styles for your loading indicator */
 }
