@@ -19,14 +19,14 @@ var assets embed.FS
 // bookSrcPath should ideally be configurable or determined dynamically,
 // but for consistency with app.go, we define it here.
 // Ensure this matches the one in app.go if GetMarkdownContent's baseDir is related.
-const bookResourcePath = "./book/LimpBook/" // Path to your markdown book's root (where images, etc., are relative to)
+const bookResourcePath = "book/LimpBook" // Path to your markdown book's root (where images, etc., are relative to)
 
 func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
 		Title:                    "devo",
-		Width:                    1024,
+		Width:                    1200,
 		Height:                   1200,
 		Frameless:                true,
 		Fullscreen:               false,
@@ -37,13 +37,13 @@ func main() {
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
-			CSSDropProperty:    "--wails-drop-target",
+			CSSDropProperty:    "--wails-drop",
 			CSSDropValue:       "drop",
 		},
-		BackgroundColour: &options.RGBA{R: 16, G: 16, B: 16, A: 1},
+		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		Windows: &windows.Options{
 			WebviewIsTransparent: true,
-			WindowIsTranslucent:  false,
+			WindowIsTranslucent:  true,
 			DisablePinchZoom:     true,
 		},
 		Mac: &mac.Options{

@@ -2,7 +2,7 @@
 
 nav {
 	cursor: var(--crosshair);
-	background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%);
+	/* background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%); */
 }
 
 .toc-item-row>a {
@@ -20,7 +20,7 @@ nav {
   height: 85vh;
   align-self: center;
   min-width: 215px;
-  background: #161616;
+  /* background: #161616; Disabled for consistent transparency */
   
   /* Add these properties for the fade effect */
   mask-image: linear-gradient(
@@ -44,7 +44,7 @@ nav {
 }
 
 .toc-container ul {
-	background: #161616;
+	background: linear-gradient(to left #16161650, to right #16161680);
 	list-style-type: none;
 	padding-left: 0;
 	/* Base ul has no padding, indentation is per item */

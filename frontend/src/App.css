@@ -5,6 +5,7 @@
 #app {
 	height: 100vh;
 	text-align: center;
+	filter: blur(10px);
 }
 
 /* In App.css or similar */
@@ -37,7 +38,7 @@ body,
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
-	background: var(--bgColor-default);
+	background: #00000050;
 	/* Prevent body scrollbars if children manage their own */
 }
 
@@ -45,7 +46,7 @@ body,
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
-	background: var(--bgColor-default);
+	/* background: var(--bgColor-default); */
 	color: #ccc;
 	font-family:
 		"Jost",
@@ -230,7 +231,7 @@ details summary {
 	box-shadow: 5px 5px 5px 5px #00000015;
 	font-weight: 500;
 	color: #aaa;
-	background: #000003;
+	background: #000003cc;
 	transition:
 		background 400ms ease,
 		color 400ms ease,
@@ -238,7 +239,7 @@ details summary {
 }
 
 details summary:hover {
-	background: #040404ff;
+	background: #000003dd;
 	transform: scale(1, 0.9);
 	box-shadow: 5px 5px 5px 5px #00000015;
 }

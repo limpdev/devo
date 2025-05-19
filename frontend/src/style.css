@@ -108,7 +108,7 @@ body,
 }
 
 .title-bar {
-	background: var(--bgColor-default);
+	background: #16161680;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -274,7 +274,7 @@ i[class^="devicon-"] {
 	-webkit-text-size-adjust: 100%;
 	margin: 0;
 	color: var(--fgColor-default);
-	background-color: #161616 !important;
+	background-color: #16161680;
 	font-family: "SF Pro Text", "Satoshi Nerd Font", "Symbols Nerd Font", BlinkMacSystemFont, "Segoe UI", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 	font-size: 16.5px;
 	line-height: 1.3;
