@@ -5,6 +5,7 @@ export namespace main {
 	    path?: string;
 	    level: number;
 	    children?: TOCItem[];
+	    isDivider?: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new TOCItem(source);
@@ -16,6 +17,7 @@ export namespace main {
 	        this.path = source["path"];
 	        this.level = source["level"];
 	        this.children = this.convertValues(source["children"], TOCItem);
+	        this.isDivider = source["isDivider"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

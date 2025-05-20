@@ -11,29 +11,6 @@
 	border-radius: 7px;
 }
 
-/* In App.css or similar */
-.content-area {
-	transition: opacity 0.3s ease-in-out;
-}
-.content-area.fading-out {
-	opacity: 0;
-}
-.content-area.fading-in {
-	opacity: 1;
-}
-
-/* Add to your App.css or index.css or style.css */
-@keyframes ripple-radius {
-	to {
-		r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
-	}
-}
-@keyframes ripple-opacity {
-	to {
-		opacity: 0;
-	}
-}
-
 html,
 body,
 #root {
@@ -52,7 +29,7 @@ body,
 	/* background: var(--bgColor-default); */
 	color: #ccc;
 	font-family:
-		"Jost",
+		"SF Compact Rounded",
 		"Symbols Nerd Font",
 		-apple-system,
 		BlinkMacSystemFont,
@@ -81,7 +58,7 @@ body,
 	color: #ccc;
 	border-radius: 7px;
 	font-family:
-		"Jost",
+		"SF Pro Text",
 		"Symbols Nerd Font",
 		-apple-system,
 		BlinkMacSystemFont,
@@ -286,7 +263,7 @@ details summary:hover {
 	box-shadow: 5px 5px 5px 5px #00000015;
 	font-weight: 500;
 	color: #aaa;
-	background: #000003;
+	background: #000003cc;
 	transition:
 		background 400ms ease,
 		color 400ms ease,
@@ -294,7 +271,7 @@ details summary:hover {
 }
 
 details summary:hover {
-	background: #040404ff;
+	background: #000003dd;
 	transform: scale(1, 0.9);
 	box-shadow: 5px 5px 5px 5px #00000015;
 }
@@ -342,4 +319,25 @@ details[open] summary::before {
 .plus-minus[open] summary::before {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
 	transform: translateY(-50%);
+}
+
+.content-area {
+	transition: opacity 0.3s ease-in-out;
+}
+.content-area.fading-out {
+	opacity: 0;
+}
+.content-area.fading-in {
+	opacity: 1;
+}
+/* Add to your App.css or index.css or style.css */
+@keyframes ripple-radius {
+	to {
+		r: 12; /* Or whatever radius makes sense for your 24x24 viewBox */
+	}
+}
+@keyframes ripple-opacity {
+	to {
+		opacity: 0;
+	}
 }

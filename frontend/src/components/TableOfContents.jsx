@@ -34,7 +34,7 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 
 	return (
 		<li>
-			<div className="toc-item-row hide-scrollbar scrollbar-none" style={itemRowStyle}>
+			<div className="toc-item-row scrollable" style={itemRowStyle}>
 				{hasChildren ? (
 					<button onClick={handleToggleCollapse} className="toc-toggle-button" aria-expanded={!isCollapsed} title={isCollapsed ? "Expand" : "Collapse"}>
 						{isCollapsed ? "" : ""}
@@ -58,10 +58,10 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 					</a>
 				) : (
 					<span
-						className="toc-item-header hide-scrollbar scrollbar-none"
+						className="toc-item-header scrollable"
 						// If non-clickable headers can also be parents, allow toggling them
 						onClick={hasChildren ? handleToggleCollapse : undefined}
-						style={{ cursor: hasChildren ? "pointer" : "default", fontWeight: item.level === 0 ? "bold" : "normal" }}
+						style={{ cursor: hasChildren ? "var(--crosshair)" : "default" }}
 					>
 						{item.title}
 					</span>
@@ -89,14 +89,14 @@ const TOCItemLink = ({ item, onItemClick, currentPath, level }) => {
 const TableOfContents = ({ tocItems, onItemClick, currentPath }) => {
 	if (!tocItems || tocItems.length === 0) {
 		return (
-			<div className="toc-container hide-scrollbar scrollbar-none">
+			<div className="toc-container scrollable">
 				<p>Table of Contents is empty or could not be loaded.</p>
 			</div>
 		);
 	}
 
 	return (
-		<nav className="toc-container hide-scrollbar scrollbar-none">
+		<nav className="toc-container scrollable">
 			<ul>
 				{tocItems.map((item, index) => (
 					<TOCItemLink

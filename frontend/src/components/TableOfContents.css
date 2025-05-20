@@ -1,44 +1,57 @@
 /* frontend/src/components/TableOfContents.css */
 
-.hide-scrollbar {
-	scrollbar-width: none !important; /* Firefox */
-	-ms-overflow-style: none !important; /* IE and Edge */
+.scrollable {
+	overflow: scroll;
+	scrollbar-width: none;
+	/* Firefox */
+	-ms-overflow-style: none;
+	/* IE 10+ */
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-	display: none !important; /* Chrome, Safari, Opera */
+.scrollable::-webkit-scrollbar {
+	display: none;
+	/* Chrome, Safari, Opera */
 }
 
 nav {
 	cursor: var(--crosshair);
-	/* background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%); */
-	cursor: var(--crosshair);
 	border-radius: 7px;
-	background: repeating-linear-gradient(to bottom, #00000050 0%, #161616 50%, #00000050 100%);
-	overflow: hidden;
 }
 
-.toc-item-row > a {
+/* FIRST TOC ITEM → should be 'Summary' */
+nav > ul > li:nth-child(1) {
+	display: none;
+}
+
+.toc-item-header {
+	font-family: "SF Pro Text", "Symbols Nerd Font";
 	font-size: 0.9em;
 	padding: 0.33em;
 	text-rendering: optimizeLegibility !important;
+	font-weight: 500;
+}
+.toc-item-row>a {
+	font-family: "SF Pro Text", "Symbols Nerd Font";
+	font-size: 0.9em;
+	padding: 0.33em;
+	text-rendering: optimizeLegibility !important;
+	font-weight: 400;
+}
+li:has(.toc-item-row:nth-of-type(2)) {
+	font-weight: 500;
 }
 
 .toc-container {
 	/* Keep your existing styles */
 	color: #ecf0f1;
-	overflow: hidden;
 	text-decoration: none;
-	height: 85vh;
+	height: 80vh;
 	align-self: center;
 	min-width: 215px;
 	/* background: #161616; Disabled for consistent transparency */
 	/* Add these properties for the fade effect */
 	mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
 	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-	/* Add some padding to make room for the fade effect */
-	padding-top: 20px;
-	padding-bottom: 20px;
 }
 
 .toc-container ul {
@@ -51,18 +64,14 @@ nav {
 	padding-bottom: 2.5em;
 	/* Keep your existing styles */
 	color: #ecf0f1;
-	overflow: auto;
 	text-decoration: none;
-	height: 85vh;
 	align-self: center;
 	min-width: 215px;
 	/* background: #161616; */
 	/* Add these properties for the fade effect */
-	mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+	mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
 	/* Add some padding to make room for the fade effect */
-	padding-top: 20px;
-	padding-bottom: 20px;
 }
 
 .toc-container ul {
@@ -71,13 +80,10 @@ nav {
 	padding-left: 0;
 	/* Base ul has no padding, indentation is per item */
 	margin: 0;
-	padding-top: 2.5em;
-	padding-bottom: 2.5em;
 }
 
 .toc-container li {
 	margin-bottom: 2px;
-	/* Optional: small space between list items */
 }
 
 .toc-item-row {
@@ -150,7 +156,6 @@ header {
 	flex-grow: 1;
 	/* Allow text to take remaining space */
 	white-space: nowrap;
-	overflow: hidden;
 	text-overflow: ellipsis;
 	line-height: 1.4;
 }
@@ -185,6 +190,8 @@ header[style*="cursor: crosshair"]:hover {
 /* Nested lists do not need extra padding-left here,
    as indentation is handled by 'paddingLeft' on 'toc-item-row' */
 .toc-container ul ul {
+	padding: 0px;
+
 	/* No specific padding needed here if item rows handle it */
 }
 

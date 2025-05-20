@@ -6,17 +6,17 @@ import (
 	"log"
 	"os"
 
-	// "path"
 	"regexp"
 	"strings"
 )
 
 // TOCItem represents an item in the Table of Contents
 type TOCItem struct {
-	Title    string    `json:"title"`
-	Path     string    `json:"path,omitempty"` // Relative path to the .md file from ./book/src/
-	Level    int       `json:"level"`          // Indentation level
-	Children []TOCItem `json:"children,omitempty"`
+	Title     string    `json:"title"`
+	Path      string    `json:"path,omitempty"` // Relative path to the .md file from ./book/src/
+	Level     int       `json:"level"`          // Indentation level
+	Children  []TOCItem `json:"children,omitempty"`
+	IsDivider bool      `json:"isDivider,omitempty"` // Flag for section headings/dividers
 }
 
 // BookData holds the TOC and the content of the initially loaded chapter
@@ -51,6 +51,9 @@ func (a *App) parseSummaryMD(summaryFilePath string) ([]TOCItem, string, error) 
 	// (?P<path>[^\)]*) captures text inside (), allows empty path for section headers.
 	re := regexp.MustCompile(`^(?P<indent>\s*)[-*]\s*\[(?P<title>[^\]]+)\]\((?P<path>[^\)]*)\)`)
 
+	// Regex to capture section headings like "# Section Title"
+	reHeading := regexp.MustCompile(`^#+\s+(.+)$`)
+
 	scanner := bufio.NewScanner(file)
 	var parentStack []*[]TOCItem            // Stack to manage current parent for nesting
 	parentStack = append(parentStack, &toc) // Root level
@@ -60,18 +63,34 @@ func (a *App) parseSummaryMD(summaryFilePath string) ([]TOCItem, string, error) 
 		line := scanner.Text()
 		trimmedLine := strings.TrimSpace(line)
 
-		// Skip empty lines or lines not starting with a list marker (simple filter)
-		if trimmedLine == "" || (!strings.HasPrefix(trimmedLine, "- ") && !strings.HasPrefix(trimmedLine, "* ")) {
+		// Skip empty lines & section dividers
+		if trimmedLine == "" || trimmedLine == "---" {
 			continue
 		}
 
+		// Check if this is a heading/section title
+		headingMatches := reHeading.FindStringSubmatch(trimmedLine)
+		if len(headingMatches) > 1 {
+			headingTitle := strings.TrimSpace(headingMatches[1])
+			sectionItem := TOCItem{
+				Title:     headingTitle,
+				Level:     0, // Section headers are at root level
+				IsDivider: true,
+			}
+
+			// Always add section headers to the root level
+			toc = append(toc, sectionItem)
+
+			// Reset parent stack to root after a section header
+			parentStack = parentStack[:1] // Keep only the root level
+			lastLevel = -1                // Reset level tracking
+			continue
+		}
+
+		// Process regular TOC items
 		matches := re.FindStringSubmatch(line)
 		if len(matches) == 0 {
-			// Might be a section header without a link, or just text.
-			// For simplicity, we'll try a simpler regex for titles without links,
-			// or ignore lines that don't match the link pattern for now.
-			// Example: `- Section Title` (mdbook might allow this, we'll make it need a dummy link for now: `[]()`)
-			// For now, we primarily care about linked items.
+			// Not a regular TOC item format we recognize
 			log.Printf("Skipping line in SUMMARY.md (no match): %s", line)
 			continue
 		}
@@ -141,6 +160,11 @@ func (a *App) parseSummaryMD(summaryFilePath string) ([]TOCItem, string, error) 
 // Helper to find the first .md file in a TOC structure (depth-first)
 func findFirstMarkdownFileInTOC(items []TOCItem) string {
 	for _, item := range items {
+		// Skip dividers when looking for markdown files
+		if item.IsDivider {
+			continue
+		}
+
 		if item.Path != "" && strings.HasSuffix(strings.ToLower(item.Path), ".md") {
 			return item.Path
 		}
