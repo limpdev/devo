@@ -3,6 +3,7 @@ node_modules
 frontend/dist
 book/LimpBook
 *.exe
+*.bak
 desktop.ini
 Desktop.ini
 *.icns
